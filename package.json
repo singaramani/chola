@@ -6,6 +6,6 @@
 	},
 	"scripts": {
 		"build": true,
-		"start": "app.js"
+		"start": "node app.js"
 	}
 }
