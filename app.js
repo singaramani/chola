@@ -170,7 +170,7 @@ function placeOrderConditional(scripArr){
   //var qty = 0;
   console.log("Placing order..");
   scripArr.forEach(function(scrip){
-    console.log(scrip.ex+"|"+scrip.sym+"|buy@"+scrip.high+"|sell@"+scrip.low+"|qty:"+qty);
+    console.log(scrip.sym+"|buy above "+scrip.high+"|sell below "+scrip.low+"|qty:"+qty);
   });  
   scripArr.forEach(function(scrip){
     placeOrdr("Sell","s",scrip.ex,scrip.sym,2,scrip.low-0.15,scrip.low-0.10,qty);
@@ -179,17 +179,7 @@ function placeOrderConditional(scripArr){
 }
 
 function placeOrdr(txnDesc,txnType,ex,sym,qty,p,tp,qty){
-    console.log({
-      "transaction_type":txnType,
-      "exchange":ex,
-      "symbol": sym,
-      "quantity": qty,
-      "order_type":"sl",
-      "product": "I",
-      "price":p.toFixed(2),
-      "trigger_price":tp.toFixed(2)
-    });
-    //   upstox.placeOrder({
+    // console.log({
     //   "transaction_type":txnType,
     //   "exchange":ex,
     //   "symbol": sym,
@@ -198,14 +188,24 @@ function placeOrdr(txnDesc,txnType,ex,sym,qty,p,tp,qty){
     //   "product": "I",
     //   "price":p.toFixed(2),
     //   "trigger_price":tp.toFixed(2)
-    // })
-    // .then(function (response) {
-    //   //console.log("all:"+JSON.stringify(response));
-    //   console.log(response.data.order_id+"|"+sym+"|"+response.data.status);
-    // })
-    // .catch(function(error){
-    //   done(error);
     // });
+      upstox.placeOrder({
+      "transaction_type":txnType,
+      "exchange":ex,
+      "symbol": sym,
+      "quantity": qty,
+      "order_type":"sl",
+      "product": "I",
+      "price":p.toFixed(2),
+      "trigger_price":tp.toFixed(2)
+    })
+    .then(function (response) {
+      //console.log("all:"+JSON.stringify(response));
+      console.log(response.data.order_id+"|"+sym+"|"+response.data.status);
+    })
+    .catch(function(error){
+      done(error);
+    });
 }
 
 var qty = 1;
@@ -220,13 +220,15 @@ var qty = 1;
 // │    └──────────────────── minute (0 - 59)
 // └───────────────────────── second (0 - 59, OPTIONAL)
 
-console.log("Scheduling JOB1");
-var tSchedule = schedule.scheduleJob('5 15 * * * 1-5', function(fireDate){
-  //console.log('This job was supposed to run at ' + fireDate + ', but actually ran at ' + new Date());
-  console.log("JOB1 started at "+fireDate);
-  selectScrips_HL(n50,2);
-});
 
 console.log("Today:"+new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
-console.log("Scheduling JOB1");
-selectScrips_HL(n50,1);
+var tSchedule = schedule.scheduleJob('5 4 * * 1-5', function(fireDate){
+  //console.log('This job was supposed to run at ' + fireDate + ', but actually ran at ' + new Date());
+  console.log("Executing scheduled job :: JOB1 at "+fireDate);
+  //console.log("JOB1 started at "+fireDate);
+  selectScrips_HL(n50,3);
+});
+
+//console.log("Today:"+new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
+
+//selectScrips_HL(n50,3);
