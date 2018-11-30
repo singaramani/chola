@@ -222,7 +222,7 @@ var qty = 1;
 
 
 console.log("Today:"+new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
-var tSchedule = schedule.scheduleJob('5 6 * * 1-5', function(fireDate){
+var tSchedule = schedule.scheduleJob('3 4 * * 1-5', function(fireDate){
   //console.log('This job was supposed to run at ' + fireDate + ', but actually ran at ' + new Date());
   console.log("Executing scheduled job :: JOB1 at "+fireDate);
   //console.log("JOB1 started at "+fireDate);
