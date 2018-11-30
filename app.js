@@ -1,7 +1,7 @@
 var Upstox = require("upstox");
 var schedule = require('node-schedule');
 
-var appKey = "eYeinZiUIA1KgHzv1Kp3r9ObrZOV9E0fPSY6AVti";
+var appKey = "f52537c2b2975c7f58aea41feeca93fcc5155991";
 var appSecret = "ttni75yei6";
 var baseURL = "http://tradez.eu-4.evennode.com";
 var redirectURL = baseURL+"/h";
@@ -222,7 +222,7 @@ var qty = 1;
 
 
 console.log("Today:"+new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
-var tSchedule = schedule.scheduleJob('5 4 * * 1-5', function(fireDate){
+var tSchedule = schedule.scheduleJob('5 6 * * 1-5', function(fireDate){
   //console.log('This job was supposed to run at ' + fireDate + ', but actually ran at ' + new Date());
   console.log("Executing scheduled job :: JOB1 at "+fireDate);
   //console.log("JOB1 started at "+fireDate);
