@@ -231,4 +231,4 @@ var tSchedule = schedule.scheduleJob('46 3 * * 1-5', function(fireDate){
 
 //console.log("Today:"+new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
 
-//selectScrips_HL(n50,3);
+selectScrips_HL(n50,3);
