@@ -69,7 +69,7 @@ function  selectScrips_HL(sList,n){
     var _scripPromise = new Promise(function(resolve,reject){
         upstox.getLiveFeed({"exchange": scrip.ex,"symbol": scrip.sym, "type":"full"})
         .then(function (response) { 
-            var pdiff = (((response.data.ltp - response.data.close)/response.data.close)*100).toFixed(2);
+            var pdiff = (((response.data.open - response.data.close)/response.data.close)*100).toFixed(2);
             resolve({
               ex:scrip.ex,
               sym:scrip.sym,
