@@ -8,7 +8,7 @@ var redirectURL = baseURL+"/h";
 
 
 var upstox = new Upstox(appKey,appSecret);
-upstox.setToken("fbeeff2c37371f81f2f09204f3fabecd4a9a7f11");
+upstox.setToken("70d879b7447b9c79df761a5326c79c3f1bdd1d29");
 upstox.setApiVersion(upstox.Constants.VERSIONS.Version_1_5_6);
 
 var n50 = [{ex:"nse_eq",sym:"ADANIPORTS"},
