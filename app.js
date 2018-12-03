@@ -1,7 +1,7 @@
 var Upstox = require("upstox");
 var schedule = require('node-schedule');
 
-var appKey = "f52537c2b2975c7f58aea41feeca93fcc5155991";
+var appKey = "eYeinZiUIA1KgHzv1Kp3r9ObrZOV9E0fPSY6AVti";
 var appSecret = "ttni75yei6";
 var baseURL = "http://tradez.eu-4.evennode.com";
 var redirectURL = baseURL+"/h";
