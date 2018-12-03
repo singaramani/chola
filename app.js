@@ -8,7 +8,7 @@ var redirectURL = baseURL+"/h";
 
 
 var upstox = new Upstox(appKey,appSecret);
-upstox.setToken("aeb7a8c5fa152727ec3583797e0fd16fad38aa94");
+upstox.setToken("fbeeff2c37371f81f2f09204f3fabecd4a9a7f11");
 upstox.setApiVersion(upstox.Constants.VERSIONS.Version_1_5_6);
 
 var n50 = [{ex:"nse_eq",sym:"ADANIPORTS"},
@@ -222,7 +222,7 @@ var qty = 1;
 
 
 console.log("Today:"+new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
-var tSchedule = schedule.scheduleJob('42 4 * * 1-5', function(fireDate){
+var tSchedule = schedule.scheduleJob('46 3 * * 1-5', function(fireDate){
   //console.log('This job was supposed to run at ' + fireDate + ', but actually ran at ' + new Date());
   console.log("Executing scheduled job :: JOB1 at "+fireDate);
   //console.log("JOB1 started at "+fireDate);
