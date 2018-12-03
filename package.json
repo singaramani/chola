@@ -1,5 +1,5 @@
 {
-	"main": "index.js",
+	"main": "app.js",
 	"dependencies": {
 		"node-schedule": "1.3.1",
 		"upstox": "upstox/upstox-nodejs#staging"
