@@ -206,7 +206,8 @@ function placeOrdr(txnDesc,txnType,ex,sym,qty,p,tp,qty){
       console.log(response.data.order_id+"|"+sym+"|"+response.data.status);
     })
     .catch(function(error){
-      done(error);
+      //done(error);
+	      console.log(JSON.stringify(error));
     });
 }
 
