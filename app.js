@@ -8,7 +8,7 @@ var redirectURL = baseURL+"/h";
 
 
 var upstox = new Upstox(appKey,appSecret);
-upstox.setToken("70d879b7447b9c79df761a5326c79c3f1bdd1d29");
+upstox.setToken("6d06263661bf2275456cdf0c59c61c0e70bbc4ff");
 upstox.setApiVersion(upstox.Constants.VERSIONS.Version_1_5_6);
 
 var n50 = [{ex:"nse_eq",sym:"ADANIPORTS"},
@@ -69,9 +69,9 @@ function  selectScrips_HL(sList,n){
     var _scripPromise = new Promise(function(resolve,reject){
         upstox.getLiveFeed({"exchange": scrip.ex,"symbol": scrip.sym, "type":"full"})
         .then(function (response) { 
-            //var pdiff = (((response.data.open - response.data.close)/response.data.close)*100).toFixed(2);
+            var pdiff = (((response.data.open - response.data.close)/response.data.close)*100).toFixed(2);
 		
-		var pdiff = (response.data.open - response.data.close).toFixed(2);
+
             resolve({
               ex:scrip.ex,
               sym:scrip.sym,
@@ -225,7 +225,7 @@ var qty = 1;
 
 
 console.log("Today:"+new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
-var tSchedule = schedule.scheduleJob('46 3 * * 1-5', function(fireDate){
+var tSchedule = schedule.scheduleJob('1 4 * * 1-5', function(fireDate){
   //console.log('This job was supposed to run at ' + fireDate + ', but actually ran at ' + new Date());
   console.log("Executing scheduled job :: JOB1 at "+fireDate);
   //console.log("JOB1 started at "+fireDate);
@@ -234,4 +234,4 @@ var tSchedule = schedule.scheduleJob('46 3 * * 1-5', function(fireDate){
 
 //console.log("Today:"+new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
 
-selectScrips_HL(n50,3);
+//selectScrips_HL(n50,3);
