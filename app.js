@@ -119,7 +119,7 @@ function getHighLow(sList,tf){
         "interval" : "5MINUTE"
       })
       .then(function (response) {
-        //console.log(JSON.stringify(response));
+        console.log(JSON.stringify(response));
         var ohlc5data = response.data;
         var all_max15 = [];
         var all_min15 = [];
