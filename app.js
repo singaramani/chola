@@ -7,7 +7,7 @@ var baseURL = "http://tradez.eu-4.evennode.com";
 var redirectURL = baseURL + "/h";
 
 var upstox = new Upstox(appKey, appSecret);
-upstox.setToken("6d06263661bf2275456cdf0c59c61c0e70bbc4ff");
+upstox.setToken("e1eb3e63f5b62f682c0e172da768b0f2bdd10f81");
 upstox.setApiVersion(upstox.Constants.VERSIONS.Version_1_5_6);
 
 var n50 = [
