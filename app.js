@@ -419,24 +419,24 @@ function placeOrdr(txnDesc, txnType, ex, sym, qty, p, tp, qty) {
 	//   "price":p.toFixed(2),
 	//   "trigger_price":tp.toFixed(2)
 	// });
-	// upstox.placeOrder({
-	// 	"transaction_type": txnType,
-	// 	"exchange": ex,
-	// 	"symbol": sym,
-	// 	"quantity": qty,
-	// 	"order_type": "sl",
-	// 	"product": "I",
-	// 	"price": p.toFixed(2),
-	// 	"trigger_price": tp.toFixed(2)
-	// })
-	// .then(function (response) {
-	// 	//logme("all:"+JSON.stringify(response));
-	// 	logme(response.data.order_id + "|" + sym + "|" + response.data.status);
-	// })
-	// .catch(function (error) {
-	// 	//done(error);
-	// 	logme(JSON.stringify(error));
-	// });
+	upstox.placeOrder({
+		"transaction_type": txnType,
+		"exchange": ex,
+		"symbol": sym,
+		"quantity": qty,
+		"order_type": "sl",
+		"product": "I",
+		"price": p.toFixed(2),
+		"trigger_price": tp.toFixed(2)
+	})
+	.then(function (response) {
+		//logme("all:"+JSON.stringify(response));
+		logme(response.data.order_id + "|" + sym + "|" + response.data.status);
+	})
+	.catch(function (error) {
+		//done(error);
+		logme(JSON.stringify(error));
+	});
 }
 
 var qty = 1;
