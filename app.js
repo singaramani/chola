@@ -403,8 +403,8 @@ function placeOrderConditional(scripArr) {
 	});
    logme("__________________________________________");
 	scripArr.forEach(function (scrip) {
-		placeOrdr("Sell", "s", scrip.ex, scrip.sym, 2, scrip.low - 0.15, scrip.low - 0.10, qty);
-		placeOrdr("Buy ", "b", scrip.ex, scrip.sym, 2, scrip.high + 0.15, scrip.high + 0.10, qty);
+		placeOrdr("Sell", "s", scrip.ex, scrip.sym, 2, scrip.low - 0.55, scrip.low - 0.50, qty);
+		placeOrdr("Buy ", "b", scrip.ex, scrip.sym, 2, scrip.high + 0.55, scrip.high + 0.50, qty);
 	});
 }
 
