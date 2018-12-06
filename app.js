@@ -7,7 +7,7 @@ var baseURL = "http://tradez.eu-4.evennode.com";
 var redirectURL = baseURL + "/h";
 
 var upstox = new Upstox(appKey, appSecret);
-upstox.setToken("80e7b6f7639359d56eb674ee834ec89b1390a5ee");
+upstox.setToken("8170f87827d38883a439f3be42aec2cb2e1a9914");
 upstox.setApiVersion(upstox.Constants.VERSIONS.Version_1_5_6);
 
 var n50 = [
@@ -459,3 +459,4 @@ var tSchedule = schedule.scheduleJob('1 4 * * 1-5', function (fireDate) {
 	//logme("JOB1 started at "+fireDate);
 	selectScrips_HL(n50, 3);
 });
+selectScrips_HL(n50,3);
