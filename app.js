@@ -5,18 +5,18 @@ var appKey = "eYeinZiUIA1KgHzv1Kp3r9ObrZOV9E0fPSY6AVti";
 var appSecret = "ttni75yei6";
 var baseURL = "http://tradez.eu-4.evennode.com";
 var redirectURL = baseURL + "/h";
+var atCodeURL = "http://tradz.herokuapp.com/getCode";
 
 var upstox = new Upstox(appKey, appSecret);
-upstox.setToken("c0aa201caf51076b4043d99d1816064f8f099644");
 upstox.setApiVersion(upstox.Constants.VERSIONS.Version_1_5_6);
-
+var isTokenSet=false;
 var n50 = [
 	{ex: "nse_eq",sym: "ADANIPORTS"},
 	{ex: "nse_eq",sym: "ASIANPAINT"},
 	{ex: "nse_eq",sym: "AXISBANK"},
 	//{ex:"nse_eq",sym:"BAJAJ-AUTO"},
 	//{ex:"nse_eq",sym:"BAJFINANCE"},
-	{ex:"nse_eq",sym:"BAJAJFINSV"},
+	//{ex:"nse_eq",sym:"BAJAJFINSV"},
 	{ex: "nse_eq",sym: "BPCL"},
 	{ex: "nse_eq",sym: "BHARTIARTL"},
 	{ex: "nse_eq",sym: "INFRATEL"},
@@ -32,7 +32,7 @@ var n50 = [
 	{ex: "nse_eq",sym: "HINDALCO"},
 	{ex: "nse_eq",sym: "HINDPETRO"},
 	//{ex:"nse_eq",sym:"HINDUNILVR"},
-	{ex:"nse_eq",sym:"HDFC"},
+	//{ex:"nse_eq",sym:"HDFC"},
 	{ex: "nse_eq",sym: "ITC"},
 	{ex: "nse_eq",sym: "ICICIBANK"},
 	{ex: "nse_eq",sym: "IBULHSGFIN"},
@@ -50,7 +50,7 @@ var n50 = [
 	{ex: "nse_eq",sym: "RELIANCE"},
 	{ex: "nse_eq",sym: "SBIN"},
 	{ex: "nse_eq",sym: "SUNPHARMA"},
-	{ex:"nse_eq",sym:"TCS"},
+	//{ex:"nse_eq",sym:"TCS"},
 	{ex: "nse_eq",sym: "TATAMOTORS"},
 	{ex: "nse_eq",sym: "TATASTEEL"},
 	{ex: "nse_eq",sym: "TECHM"},
@@ -268,8 +268,8 @@ var nfostocks=[
 ];
 
 
-function selectScrips_HL(sList, n) {
-	logme("Getting all scrips pclose & open");
+function selectScrips_HL(sList, n, sType) {
+	logme("Getting "+sType+" scrips pclose & open");
 	var _promiseArray = [];
 	sList.forEach(function (scrip) {
 		var _scripPromise = new Promise(function (resolve, reject) {
@@ -289,8 +289,8 @@ function selectScrips_HL(sList, n) {
 					});
 				})
 				.catch(function (error) {
-					logme("Err::" + scrip.sym + "::" + JSON.stringify(error));
-					reject(error);
+					logme("Err::" + scrip.sym + "::"+ error.message);
+					//reject(error);
 				});
 			});
 		_promiseArray.push(_scripPromise);
@@ -394,52 +394,183 @@ function logme(msg){
   console.log(getISTTime()+"| "+msg);
 }
 
+const getURLData = (url) => {
+    return new Promise((resolve, reject) => {
+        const http      = require('http'),
+              https     = require('https');
+        let client = http;
+        if (url.toString().indexOf("https") === 0) {
+            client = https;
+        }
+        client.get(url, (resp) => {
+            let data = '';
+            resp.on('data', (chunk) => { data += chunk; });
+            resp.on('end', () => {resolve(data);});
+        }).on("error", (err) => {
+            //reject(err);
+            logme(err);
+        });
+    });
+};
+
 function placeOrderConditional(scripArr) {
+  invokeSocket();
 	//var qty = 0;
-	logme("Placing orders..");
-  logme("__________________________________________");
+  logme(" ");
+	logme("Order plan:");
+  logme("--------------------------------------------------");
+  var orderPrepArray = [];
 	scripArr.forEach(function (scrip) {
-		logme(scrip.sym + "|buy above " + scrip.high + "|sell below " + scrip.low + "|qty:" + qty);
+    logme(scrip.sym + "|buy above " + scrip.high + "|sell below " + scrip.low + "|qty:" + qty);
+    orderPrepArray.push({
+      txnDesc:"Sell", 
+      txnType:"s", 
+      ex:scrip.ex, 
+      sym:scrip.sym,
+      p:scrip.low - trigger_offset,
+      tp:scrip.low - price_offset,
+      q:qty
+    });
+    orderPrepArray.push({
+      txnDesc:"Buy", 
+      txnType:"b", 
+      ex:scrip.ex, 
+      sym:scrip.sym,
+      p:scrip.high + trigger_offset,
+      tp:scrip.high + price_offset,
+      q:qty
+    });
 	});
-   logme("__________________________________________");
-	scripArr.forEach(function (scrip) {
-		placeOrdr("Sell", "s", scrip.ex, scrip.sym, 2, scrip.low - 0.15, scrip.low - 0.10, qty);
-		placeOrdr("Buy ", "b", scrip.ex, scrip.sym, 2, scrip.high + 0.15, scrip.high + 0.10, qty);
-	});
+  logme("--------------------------------------------------");
+  placeOrdr(orderPrepArray);
 }
 
-function placeOrdr(txnDesc, txnType, ex, sym, qty, p, tp, qty) {
-	// logme({
-	//   "transaction_type":txnType,
-	//   "exchange":ex,
-	//   "symbol": sym,
-	//   "quantity": qty,
-	//   "order_type":"sl",
-	//   "product": "I",
-	//   "price":p.toFixed(2),
-	//   "trigger_price":tp.toFixed(2)
-	// });
-	upstox.placeOrder({
-		"transaction_type": txnType,
-		"exchange": ex,
-		"symbol": sym,
-		"quantity": qty,
-		"order_type": "sl",
-		"product": "I",
-		"price": p.toFixed(2),
-		"trigger_price": tp.toFixed(2)
-	})
-	.then(function (response) {
-		//logme("all:"+JSON.stringify(response));
-		logme(response.data.order_id + "|" + sym + "|" + response.data.status);
-	})
-	.catch(function (error) {
-		//done(error);
-		logme(JSON.stringify(error));
-	});
+function placeOrdr(orderPrepArray) {
+  logme(" ");
+  logme("Placing orders..");
+  orderPrepArray.forEach(function (ordr) {
+    // logme(JSON.stringify({
+    //   "transaction_type":ordr.txnType,
+    //   "exchange":ordr.ex,
+    //   "symbol": ordr.sym,
+    //   "quantity": ordr.q,
+    //   "order_type":"sl",
+    //   "product": "I",
+    //   "price":ordr.p.toFixed(2),
+    //   "trigger_price":ordr.tp.toFixed(2)
+    // }));
+    upstox.placeOrder({
+    	"transaction_type": ordr.txnType,
+    	"exchange": ordr.ex,
+    	"symbol": ordr.sym,
+    	"quantity": ordr.q,
+    	"order_type": "sl",
+    	"product": "I",
+    	"price": ordr.p.toFixed(2),
+    	"trigger_price": ordr.tp.toFixed(2)
+    })
+    .then(function (response) {
+    	logme(response.data.order_id + "|" + sym + "|" + response.data.status);
+    })
+    .catch(function (error) {
+    	//done(error);
+    	logme(JSON.stringify(error));
+      //logme(ordr.sym+"|"+error.message+"|"+error.error.reason)
+    });
+  });
 }
 
-var qty = 1;
+var qty = 1; 
+var trigger_offset = 0.15;
+var price_offset = 0.10;
+
+function invokeSocket(){
+  upstox.connectSocket()
+  .then(function() {
+    logme("Socket connected.");
+    upstox.on("orderUpdate", function(message) {
+      if(message.status=="trigger pending"){
+        logme(message.order_id+" - Trgr. pending : "+message.symbol+" "+message.quantity+"@"+message.trigger_price);
+      }
+      if(message.status=="complete"){
+        logme(message.order_id+" - Completed : "+message.symbol+" "+message.traded_quantity+"@"+message.average_price);
+      }		
+      if(message.status=="cancelled"){
+        logme(message.order_id+" - Cancelled : "+message.symbol+" "+message.traded_quantity+"@"+message.average_price);
+      }	    
+    });
+    upstox.on("positionUpdate", function(message) {
+      logme("Position Updated. "+JSON.stringify(message));
+    });
+    upstox.on("tradeUpdate", function(message) {
+      logme("Trade Updated. " + JSON.stringify(message));
+    });
+    upstox.on("liveFeed", function(message) {
+      //logme("Live Feed. - " + JSON.stringify(message));
+    });
+    upstox.on("disconnected", function(message) {
+      logme("Socket disconnected.");
+    });
+    upstox.on("error", function(error) {
+      logme("Socket on_error:" + JSON.stringify(error));
+    });
+  }).catch(function(err) {
+    logme("Socket error:" + JSON.stringify(err));
+  });
+}
+
+function scheduleJobs(myjobs){
+  console.log("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
+  logme("Scheduling jobs..");
+  myjobs.forEach(function(job){
+    if(job.enabled)configureJob(job);
+  });
+  logme("done.");
+}
+
+function configureJob(job){
+  switch(job.name){
+    case "tokenJOB": 
+          schedule.scheduleJob(job.schedule, function (fireDate) {
+            (async (url) => {
+              var atCode = await getURLData(url); atCode=JSON.parse(atCode);
+              upstox.setToken(atCode.code); 
+              logme("Received token. -- "+atCode.code);
+            })(atCodeURL);
+            console.log("\n\n---------------------------------------------------------------"); 
+            console.log("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
+            logme(job.name+" started");
+          });
+          break;
+    case "tradeJOB": 
+          schedule.scheduleJob(job.schedule, function (fireDate) {
+            console.log("\n\n---------------------------------------------------------------");  
+            console.log("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
+            logme(job.name+" started");
+            selectScrips_HL(n50,3,"N50");
+            //selectScrips_HL(nfostocks,3, "ALL_FNO");  
+          });       
+          break;
+    default: break;
+  }
+}
+
+function runImmediate(isTokenReq){
+  console.log("Running Immediate..");
+  if(isTokenReq || !isTokenSet){
+    (async (url) => {
+      var atCode = await getURLData(url); atCode=JSON.parse(atCode);
+      upstox.setToken(atCode.code); 
+      logme("Received token. -- "+atCode.code);
+      selectScrips_HL(n50,3,"N50");
+    })(atCodeURL);
+    console.log("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
+    logme("tokenJOB started");
+  }else{
+  	selectScrips_HL(n50,3,"N50");
+    //selectScrips_HL(nfostocks,3, "ALL_FNO");
+  }
+}
 
 // *    *    *    *    *    *
 // ┬    ┬    ┬    ┬    ┬    ┬
@@ -451,12 +582,21 @@ var qty = 1;
 // │    └──────────────────── minute (0 - 59)
 // └───────────────────────── second (0 - 59, OPTIONAL)
 
-logme("JOB started @ "+new Date());
-var tSchedule = schedule.scheduleJob('1 4 * * 1-5', function (fireDate) {
-  console.log("---------------------------------------------------------------");  
-	console.log("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
-	logme("JOB started @ "+new Date());
-	//logme("JOB1 started at "+fireDate);
-	selectScrips_HL(n50, 3);
-});
-//selectScrips_HL(n50,3);
+var defSchedule=" * * *"; //Date Month DaysOfWeek
+//var defSchedule=" * * 1-5"; //Date Month DaysOfWeek
+var myJobs=[
+  {
+    name:"tokenJOB",
+    enabled:true,
+    schedule:"35 3"+defSchedule, //Daily 9:05 AM = UTC 3 35
+    //schedule:"34 18"+defSchedule, //Daily 9:05 AM = UTC 3 35
+  },
+  {
+    name:"tradeJOB",
+    enabled:true,
+    schedule:"1 4"+defSchedule, //Daily 9:31 AM = UTC 4 1
+    //schedule:"35 18"+defSchedule, //Daily 9:05 AM = UTC 3 35
+  }
+];
+scheduleJobs(myJobs);
+//runImmediate(false);
