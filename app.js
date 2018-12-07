@@ -16,13 +16,13 @@ var n50 = [
 	{ex: "nse_eq",sym: "AXISBANK"},
 	//{ex:"nse_eq",sym:"BAJAJ-AUTO"},
 	//{ex:"nse_eq",sym:"BAJFINANCE"},
-	//{ex:"nse_eq",sym:"BAJAJFINSV"},
+	{ex:"nse_eq",sym:"BAJAJFINSV"},
 	{ex: "nse_eq",sym: "BPCL"},
 	{ex: "nse_eq",sym: "BHARTIARTL"},
 	{ex: "nse_eq",sym: "INFRATEL"},
 	{ex: "nse_eq",sym: "CIPLA"},
 	{ex: "nse_eq",sym: "COALINDIA"},
-	//{ex:"nse_eq",sym:"DRREDDY"},
+	{ex:"nse_eq",sym:"DRREDDY"},
 	//{ex:"nse_eq",sym:"EICHERMOT"},
 	{ex: "nse_eq",sym: "GAIL"},
 	{ex: "nse_eq",sym: "GRASIM"},
@@ -32,7 +32,7 @@ var n50 = [
 	{ex: "nse_eq",sym: "HINDALCO"},
 	{ex: "nse_eq",sym: "HINDPETRO"},
 	//{ex:"nse_eq",sym:"HINDUNILVR"},
-	//{ex:"nse_eq",sym:"HDFC"},
+	{ex:"nse_eq",sym:"HDFC"},
 	{ex: "nse_eq",sym: "ITC"},
 	{ex: "nse_eq",sym: "ICICIBANK"},
 	{ex: "nse_eq",sym: "IBULHSGFIN"},
@@ -41,7 +41,7 @@ var n50 = [
 	{ex: "nse_eq",sym: "INFY"},
 	{ex: "nse_eq",sym: "JSWSTEEL"},
 	//{ex:"nse_eq",sym:"KOTAKBANK"},
-	//{ex:"nse_eq",sym:"LT"},
+	{ex:"nse_eq",sym:"LT"},
 	{ex: "nse_eq",sym: "M&M"},
 	//{ex:"nse_eq",sym:"MARUTI"},
 	{ex: "nse_eq",sym: "NTPC"},
@@ -50,7 +50,7 @@ var n50 = [
 	{ex: "nse_eq",sym: "RELIANCE"},
 	{ex: "nse_eq",sym: "SBIN"},
 	{ex: "nse_eq",sym: "SUNPHARMA"},
-	//{ex:"nse_eq",sym:"TCS"},
+	{ex:"nse_eq",sym:"TCS"},
 	{ex: "nse_eq",sym: "TATAMOTORS"},
 	{ex: "nse_eq",sym: "TATASTEEL"},
 	{ex: "nse_eq",sym: "TECHM"},
@@ -403,8 +403,8 @@ function placeOrderConditional(scripArr) {
 	});
    logme("__________________________________________");
 	scripArr.forEach(function (scrip) {
-		placeOrdr("Sell", "s", scrip.ex, scrip.sym, 2, scrip.low - 0.55, scrip.low - 0.50, qty);
-		placeOrdr("Buy ", "b", scrip.ex, scrip.sym, 2, scrip.high + 0.55, scrip.high + 0.50, qty);
+		placeOrdr("Sell", "s", scrip.ex, scrip.sym, 2, scrip.low - 0.15, scrip.low - 0.10, qty);
+		placeOrdr("Buy ", "b", scrip.ex, scrip.sym, 2, scrip.high + 0.15, scrip.high + 0.10, qty);
 	});
 }
 
