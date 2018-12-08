@@ -588,14 +588,14 @@ var myJobs=[
   {
     name:"tokenJOB",
     enabled:true,
-    schedule:"35 3"+defSchedule, //Daily 9:05 AM = UTC 3 35
-    //schedule:"34 1ule, //Daily 9:05 AM = UTC 3 35
+    //schedule:"35 3"+defSchedule, //Daily 9:05 AM = UTC 3 35
+    schedule: process.env.TOKENJOB //Daily 9:05 AM = UTC 3 35
   },
   {
     name:"tradeJOB",
     enabled:true,
-    schedule:"1 4"+defSchedule, //Daily 9:31 AM = UTC 4 1
-    //schedule:"35 18"+defSchedule, //Daily 9:05 AM = UTC 3 35
+    //schedule:"1 4"+defSchedule, //Daily 9:31 AM = UTC 4 1
+    schedule: process.env.TRADEJOB //Daily 9:05 AM = UTC 3 35
   }
 ];
 scheduleJobs(myJobs);
