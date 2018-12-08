@@ -1,11 +1,11 @@
 var Upstox = require("upstox");
 var schedule = require('node-schedule');
 
-var appKey = "eYeinZiUIA1KgHzv1Kp3r9ObrZOV9E0fPSY6AVti";
-var appSecret = "ttni75yei6";
+var appKey = process.env.APPKEY;
+var appSecret = process.env.APPSECRET;
 var baseURL = "http://tradez.eu-4.evennode.com";
-var redirectURL = baseURL + "/h";
-var atCodeURL = "http://tradz.herokuapp.com/getCode";
+var redirectURL = process.env.RDRURL;
+var atCodeURL = process.env.ATCODEURL;
 
 var upstox = new Upstox(appKey, appSecret);
 upstox.setApiVersion(upstox.Constants.VERSIONS.Version_1_5_6);
@@ -480,7 +480,7 @@ function placeOrdr(orderPrepArray) {
   });
 }
 
-var qty = 1; 
+var qty = process.env.TQTY;
 var trigger_offset = 0.15;
 var price_offset = 0.10;
 
@@ -582,14 +582,14 @@ function runImmediate(isTokenReq){
 // │    └──────────────────── minute (0 - 59)
 // └───────────────────────── second (0 - 59, OPTIONAL)
 
-var defSchedule=" * * *"; //Date Month DaysOfWeek
+
 //var defSchedule=" * * 1-5"; //Date Month DaysOfWeek
 var myJobs=[
   {
     name:"tokenJOB",
     enabled:true,
     schedule:"35 3"+defSchedule, //Daily 9:05 AM = UTC 3 35
-    //schedule:"34 18"+defSchedule, //Daily 9:05 AM = UTC 3 35
+    //schedule:"34 1ule, //Daily 9:05 AM = UTC 3 35
   },
   {
     name:"tradeJOB",
