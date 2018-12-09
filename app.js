@@ -534,7 +534,7 @@ function configureJob(job){
           schedule.scheduleJob(job.schedule, function (fireDate) {
             (async (url) => {
               var atCode = await getURLData(url); atCode=JSON.parse(atCode);
-              upstox.setToken(atCode.code); 
+              upstox.setToken(atCode.token); 
               logme("Received token. -- "+atCode.code);
             })(atCodeURL);
             console.log("\n\n---------------------------------------------------------------"); 
@@ -560,7 +560,7 @@ function runImmediate(isTokenReq){
   if(isTokenReq || !isTokenSet){
     (async (url) => {
       var atCode = await getURLData(url); atCode=JSON.parse(atCode);
-      upstox.setToken(atCode.code); 
+      upstox.setToken(atCode.token); 
       logme("Received token. -- "+atCode.code);
       selectScrips_HL(n50,3,"N50");
     })(atCodeURL);
