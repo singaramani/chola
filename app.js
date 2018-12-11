@@ -602,7 +602,7 @@ var myJobs=[
 
 scheduleJobs(myJobs);
 //runImmediate(false);
-
+/*
 fs.writeFile("/data/token.txt", "Hey there!", function(err) {
     if(err) {return console.log(err);}
     console.log("The file was saved!");
@@ -616,3 +616,4 @@ fs.writeFile("/data/token.txt", "Hey there!", function(err) {
     		console.log("file read:: "+data);
 	});
 });
+*/
