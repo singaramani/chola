@@ -1,5 +1,6 @@
 var Upstox = require("upstox");
 var schedule = require('node-schedule');
+const fs = require('fs');
 
 var appKey = process.env.APPKEY;
 var appSecret = process.env.APPSECRET;
@@ -598,5 +599,20 @@ var myJobs=[
     schedule: process.env.TRADEJOB //Daily 9:05 AM = UTC 3 35
   }
 ];
+
 scheduleJobs(myJobs);
 //runImmediate(false);
+
+fs.writeFile("/data/token.txt", "Hey there!", function(err) {
+    if(err) {return console.log(err);}
+    console.log("The file was saved!");
+});
+
+fs.writeFile("/data/token.txt", "Hey there!", function(err) {
+    if(err) {return console.log(err);}
+    console.log("The file was saved!");
+	fs.readFile('/data/token.txt', 'utf8', function (err,data) {
+    		if (err) {return console.log(err);}
+    		console.log("file read:: "+data);
+	});
+});
