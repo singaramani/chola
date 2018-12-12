@@ -93,7 +93,7 @@ function tradeJOB(){
 	console.log("\n\n---------------------------------------------------------------"); 
 	Wokers.logme("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
 	Wokers.logme("tradeJOB Started"); 
-	initSetToken();
+	Trader.initSetToken();
 	Trader.strategyORB();
 }
 
