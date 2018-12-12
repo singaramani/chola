@@ -92,15 +92,15 @@ function tradeJOB(){
 
 function scheduleTokenServerWakeup(){
 	console.log("Scheduling wakeupJOB..");  
-	schedule.scheduleJob(appconts.wakeup_schedule, function (fireDate) {wakeupJOB();};
+	schedule.scheduleJob(appconts.wakeup_schedule, function (fireDate) {wakeupJOB();});
 }scheduleTokenServerWakeup();
 
 function scheduleTokenJOB(){
 	console.log("Scheduling tokenJOB..");  
-	schedule.scheduleJob(appconts.wakeup_schedule, function (fireDate) {tokenJOB();};
+	schedule.scheduleJob(appconts.wakeup_schedule, function (fireDate) {tokenJOB();});
 }scheduleTokenJOB();
 
 function scheduleTradeJOB(){
 	console.log("Scheduling tradeJOB..");
-	schedule.scheduleJob(appconts.trade_schedule, function (fireDate) {tradeJOB();;
+	schedule.scheduleJob(appconts.trade_schedule, function (fireDate) {tradeJOB();});
 }scheduleTradeJOB();
