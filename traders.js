@@ -1,6 +1,6 @@
 (function() {
 	const Upstox = require("upstox");
-	
+	const fs = require('fs');
 	const Appconst = require("./appconstants");
 	const Wokers = require("./workers");
 	
@@ -22,7 +22,7 @@
 			var codeData = JSON.parse(data);
 			upstox.setToken(codeData.token);
 			invokeSocket();
-			Wokers.logme("Token set..");
+			Wokers.logme("Token set.. --"+codeData.token);
 			Wokers.logme("Socket invoked..");
 		});
 
