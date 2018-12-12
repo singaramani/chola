@@ -2,7 +2,7 @@
 	const Upstox = require("upstox");
 	const fs = require('fs');
 	const Appconst = require("./appconstants");
-	const Wokers = require("./workers");
+	const Worker = require("./workers");
 	
 	var appconts = Appconst.getAppConstants();
 	var upstox = new Upstox(appconts.appKey, appconts.appSecret);
@@ -22,14 +22,14 @@
 			var codeData = JSON.parse(data);
 			upstox.setToken(codeData.token);
 			invokeSocket();
-			Wokers.logme("Token set.. --"+codeData.token);
-			Wokers.logme("Socket invoked..");
+			Worker.logme("Token set.. --"+codeData.token);
+			Worker.logme("Socket invoked..");
 		});
 
 	}
 	
 	function selectScrips_HL(sList, n, sType) {
-		Wokers.Wokers.Wokers.logme("Getting "+sType+" scrips pclose & open");
+		Worker.logme("Getting "+sType+" scrips pclose & open");
 		var _promiseArray = [];
 		sList.forEach(function (scrip) {
 			var _scripPromise = new Promise(function (resolve, reject) {
@@ -49,7 +49,7 @@
 						});
 					})
 					.catch(function (error) {
-						Wokers.Wokers.Wokers.logme("Err::" + scrip.sym + "::"+ error.message);
+						Worker.logme("Err::" + scrip.sym + "::"+ error.message);
 						//reject(error);
 					});
 				});
@@ -57,24 +57,24 @@
 		});
 
 		Promise.all(_promiseArray).then(function (respArr) {
-			Wokers.Wokers.Wokers.logme("Sorting..");
+			Worker.logme("Sorting..");
 			respArr = respArr.sortBy('diff');
-			//Wokers.Wokers.Wokers.logme("all:"+JSON.stringify(respArr));
-			Wokers.Wokers.Wokers.logme("Identifying top and bottom " + n + " scrips..");
+			//Worker.logme("all:"+JSON.stringify(respArr));
+			Worker.logme("Identifying top and bottom " + n + " scrips..");
 			var selectedScrips = [];
 			selectedScrips.push.apply(selectedScrips, respArr.slice(0, n));
 			selectedScrips.push.apply(selectedScrips, respArr.slice(-n));
-			//Wokers.Wokers.Wokers.logme("all:"+JSON.stringify(selectedScrips));
+			//Worker.logme("all:"+JSON.stringify(selectedScrips));
 			var sList = "";
 			selectedScrips.forEach(function (scrip) {
 				sList += scrip.sym + ","
 			});
-			Wokers.Wokers.Wokers.logme("Selected scrips : [" + sList + "]");
+			Worker.logme("Selected scrips : [" + sList + "]");
 			getHighLow(selectedScrips, 15);
 		});
 	}
 	function getHighLow(sList, tf) {
-		Wokers.Wokers.logme("Identifying first " + tf + "min HL");
+		Worker.logme("Identifying first " + tf + "min HL");
 		var _promiseArray = [];
 		var ftf = tf / 5;
 		sList.forEach(function (scrip) {
@@ -82,13 +82,13 @@
 					upstox.getOHLC({
 						"exchange": scrip.ex,
 						"symbol": scrip.sym,
-						"start_date": Wokers.getTodayDate(),
-						"end_date": Wokers.getTodayDate(),
+						"start_date": Worker.getTodayDate(),
+						"end_date": Worker.getTodayDate(),
 						"format": "json",
 						"interval": "5MINUTE"
 					})
 					.then(function (response) {
-						//Wokers.Wokers.logme(JSON.stringify(response));
+						//Worker.logme(JSON.stringify(response));
 						var ohlc5data = response.data;
 						var all_max15 = [];
 						var all_min15 = [];
@@ -100,8 +100,8 @@
 						}
 						var max15 = Math.max.apply(null, all_max15);
 						var min15 = Math.min.apply(null, all_min15);
-						//Wokers.Wokers.logme("max:"+max15);
-						//Wokers.Wokers.logme("min:"+min15);
+						//Worker.logme("max:"+max15);
+						//Worker.logme("min:"+min15);
 						resolve({
 							sym: scrip.sym,
 							ex: scrip.ex,
@@ -110,7 +110,7 @@
 						});
 					})
 					.catch(function (error) {
-						Wokers.Wokers.logme(JSON.stringify(error));
+						Worker.logme(JSON.stringify(error));
 						reject(error);
 					});
 				});
@@ -118,7 +118,7 @@
 		});
 
 		Promise.all(_promiseArray).then(function (respArr) {
-			//Wokers.Wokers.logme(JSON.stringify(respArr));
+			//Worker.logme(JSON.stringify(respArr));
 			placeOrderConditional(respArr);
 		});
 	}
@@ -126,12 +126,12 @@
 	function placeOrderConditional(scripArr) {
 	  invokeSocket();
 		//var qty = 0;
-	  Wokers.logme(" ");
-		Wokers.logme("Order plan:");
-	  Wokers.logme("--------------------------------------------------");
+	  Worker.logme(" ");
+		Worker.logme("Order plan:");
+	  Worker.logme("--------------------------------------------------");
 	  var orderPrepArray = [];
 		scripArr.forEach(function (scrip) {
-		Wokers.logme(scrip.sym + "|buy above " + scrip.high + "|sell below " + scrip.low + "|qty:" + qty);
+		Worker.logme(scrip.sym + "|buy above " + scrip.high + "|sell below " + scrip.low + "|qty:" + qty);
 		orderPrepArray.push({
 		  txnDesc:"Sell", 
 		  txnType:"s", 
@@ -151,15 +151,15 @@
 		  q:qty
 		});
 		});
-	  Wokers.logme("--------------------------------------------------");
+	  Worker.logme("--------------------------------------------------");
 	  placeOrdr(orderPrepArray);
 	}
 
 	function placeOrdr(orderPrepArray) {
-	  Wokers.logme(" ");
-	  Wokers.logme("Placing orders..");
+	  Worker.logme(" ");
+	  Worker.logme("Placing orders..");
 	  orderPrepArray.forEach(function (ordr) {
-		// Wokers.logme(JSON.stringify({
+		// Worker.logme(JSON.stringify({
 		//   "transaction_type":ordr.txnType,
 		//   "exchange":ordr.ex,
 		//   "symbol": ordr.sym,
@@ -180,12 +180,12 @@
 			"trigger_price": ordr.tp.toFixed(2)
 		})
 		.then(function (response) {
-			Wokers.logme(response.data.order_id + "|" + sym + "|" + response.data.status);
+			Worker.logme(response.data.order_id + "|" + sym + "|" + response.data.status);
 		})
 		.catch(function (error) {
 			//done(error);
-			Wokers.logme(JSON.stringify(error));
-		  //Wokers.logme(ordr.sym+"|"+error.message+"|"+error.error.reason)
+			Worker.logme(JSON.stringify(error));
+		  //Worker.logme(ordr.sym+"|"+error.message+"|"+error.error.reason)
 		});
 	  });
 	}
@@ -193,35 +193,35 @@
 	function invokeSocket(){
 	  upstox.connectSocket()
 	  .then(function() {
-		Wokers.logme("Socket connected.");
+		Worker.logme("Socket connected.");
 		upstox.on("orderUpdate", function(message) {
 		  if(message.status=="trigger pending"){
-			Wokers.logme(message.order_id+" - Trgr. pending : "+message.symbol+" "+message.quantity+"@"+message.trigger_price);
+			Worker.logme(message.order_id+" - Trgr. pending : "+message.symbol+" "+message.quantity+"@"+message.trigger_price);
 		  }
 		  if(message.status=="complete"){
-			Wokers.logme(message.order_id+" - Completed : "+message.symbol+" "+message.traded_quantity+"@"+message.average_price);
+			Worker.logme(message.order_id+" - Completed : "+message.symbol+" "+message.traded_quantity+"@"+message.average_price);
 		  }		
 		  if(message.status=="cancelled"){
-			Wokers.logme(message.order_id+" - Cancelled : "+message.symbol+" "+message.traded_quantity+"@"+message.average_price);
+			Worker.logme(message.order_id+" - Cancelled : "+message.symbol+" "+message.traded_quantity+"@"+message.average_price);
 		  }	    
 		});
 		upstox.on("positionUpdate", function(message) {
-		  Wokers.logme("Position Updated. "+JSON.stringify(message));
+		  Worker.logme("Position Updated. "+JSON.stringify(message));
 		});
 		upstox.on("tradeUpdate", function(message) {
-		  Wokers.logme("Trade Updated. " + JSON.stringify(message));
+		  Worker.logme("Trade Updated. " + JSON.stringify(message));
 		});
 		upstox.on("liveFeed", function(message) {
-		  //Wokers.logme("Live Feed. - " + JSON.stringify(message));
+		  //Worker.logme("Live Feed. - " + JSON.stringify(message));
 		});
 		upstox.on("disconnected", function(message) {
-		  Wokers.logme("Socket disconnected.");
+		  Worker.logme("Socket disconnected.");
 		});
 		upstox.on("error", function(error) {
-		  Wokers.logme("Socket on_error:" + JSON.stringify(error));
+		  Worker.logme("Socket on_error:" + JSON.stringify(error));
 		});
 	  }).catch(function(err) {
-		Wokers.logme("Socket error:" + JSON.stringify(err));
+		Worker.logme("Socket error:" + JSON.stringify(err));
 	  });
 	}
 	

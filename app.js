@@ -5,7 +5,7 @@ const fs = require('fs');
 
 /*Requires Local*/
 const Appconst = require("./appconstants");
-const Wokers = require("./workers");
+const Worker = require("./workers");
 const Trader = require("./traders");
 
 /*Vars*/
@@ -29,7 +29,7 @@ try{
 				if(err) { return "file read error"; logme("file read error"); }
 				response.writeHead(200, {'Content-Type': 'text/plain'});
 				response.end(data);
-				Wokers.logme("Web read code invoked.")
+				Worker.logme("Web read code invoked.")
 			});
 		}else if (urlpath == '/wakejob') {
 			wakeupJOB();
@@ -58,7 +58,7 @@ try{
 }
 
 function getLoginToken(){
-	Wokers.fetchWriteToken(appconts.atCodeURL);
+	Worker.fetchWriteToken(appconts.atCodeURL);
 }
 
 console.log("------------------------------------------------------------------------");  
@@ -77,22 +77,22 @@ console.log("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolka
 
 function wakeupJOB(){
 	console.log("\n\n---------------------------------------------------------------"); 
-	Wokers.logme("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
-	Wokers.logme("wakeupJOB Started"); 
-	Wokers.wakeupServer(appconts.wakeupURL);
+	Worker.logme("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
+	Worker.logme("wakeupJOB Started"); 
+	Worker.wakeupServer(appconts.wakeupURL);
 }
 
 function tokenJOB(){
 	console.log("\n\n---------------------------------------------------------------"); 
-	Wokers.logme("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
-	Wokers.logme("tokenJOB Started"); 
+	Worker.logme("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
+	Worker.logme("tokenJOB Started"); 
 	getLoginToken();
 }
 
 function tradeJOB(){
 	console.log("\n\n---------------------------------------------------------------"); 
-	Wokers.logme("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
-	Wokers.logme("tradeJOB Started"); 
+	Worker.logme("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
+	Worker.logme("tradeJOB Started"); 
 	Trader.initSetToken();
 	Trader.strategyORB();
 }
