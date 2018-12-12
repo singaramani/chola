@@ -1,119 +1,73 @@
-/*Requires*/
-const http = require("http");
-const scheduler = require('node-schedule');
-const fs = require('fs');
-
-/*Requires Local*/
-const Appconst = require("./appconstants");
-const Wokers = require("./workers");
-const Trader = require("./traders");
-
-/*Vars*/
-const PORT = process.env.PORT || 8080;
-var appconts = Appconst.getAppConstants();
-
-/*Handling HTTP Req*/
-try{
-	http.createServer(function (request, response) {
-		var urlpath = request.url.split("?").shift();
-		if (urlpath == '/'+appconts.getCodeCommand) {
-			response.writeHead(200, {'Content-Type': 'application/json'});
-			response.end(JSON.stringify({"command": "done"}));
-		}else if (urlpath == '/'+appconts.getCodeWrite) {
-			getLoginToken();
-			response.writeHead(200, {'Content-Type': 'application/json'});
-			response.end(JSON.stringify({"command": "done"}));
-		}else if (urlpath == '/'+appconts.readRawCode) {
-			fs.readFile("/data/token.txt", "utf8", function(err, data){
-			//fs.readFile("D:\\token.txt", "utf8", function(err, data){
-				if(err) { return "file read error"; logme("file read error"); }
-				response.writeHead(200, {'Content-Type': 'text/plain'});
-				response.end(data);
-				Wokers.logme("Web read code invoked.")
+(function() {
+	const fs = require('fs');
+	module.exports.fetchWriteToken = function(url) {
+		const httpc = require('http'), 
+		httpsc     = require('https');
+		let client = httpc;
+		if (url.toString().indexOf("https") === 0) {client = httpsc;}
+		var data="";
+		logme("Connecting to token server..");
+		client.get(url, (resp) => {
+			resp.on('data', (chunk) => { data += chunk; });
+			resp.on('end', () => {
+				fs.writeFile("/data/token.txt", data.trim(), function(err) {
+				//fs.writeFile("D:\\token.txt", data.trim(), function(err) {
+					if(err) {return console.log("Token->Store.. Err::"+err);}
+					logme("Token->Store.. Done");
+				});
 			});
-		}else if (urlpath == '/wakejob') {
-			wakeupJOB();
-			response.writeHead(200, {'Content-Type': 'application/json'});
-			response.end(JSON.stringify({"command": "done"}));
-		}else if (urlpath == '/tokenjob') {
-			tokenJOB();
-			response.writeHead(200, {'Content-Type': 'application/json'});
-			response.end(JSON.stringify({"command": "done"}));
-		}else if (urlpath == '/tradejob') {
-			tradeJOB();
-			response.writeHead(200, {'Content-Type': 'application/json'});
-			response.end(JSON.stringify({"command": "done"}));
-		}else if (urlpath == '/rsall') {
-			rescheduleAllJobs();
-			response.writeHead(200, {'Content-Type': 'application/json'});
-			response.end(JSON.stringify({"command": "done"}));
-		}else {
-			response.writeHead(200, {'Content-Type': 'application/json'});
-			response.end(JSON.stringify({"command": "blank"}));
+		}).on("error", (err) => {
+			logme(err);
+		});
+    }
+	module.exports.wakeupServer = function(url) {
+		const httpc = require('http'), 
+		httpsc     = require('https');
+		let client = httpc;
+		if (url.toString().indexOf("https") === 0) {client = httpsc;}
+		var data="";
+		console.log(url);
+		client.get(url, (resp) => {
+			resp.on('data', (chunk) => { data += chunk; });
+			resp.on('end', () => {
+				logme("Wakeup sent..");
+			});
+		}).on("error", (err) => {
+			logme(err);
+		});
+    }
+	function readToken() {
+		fs.readFile("/data/token.txt", "utf8", function(err, data){
+		//fs.readFile("D:\\token.txt", "utf8", function(err, data){
+			if(err) { return "file read error"; logme("file read error"); }
+			return data;
+		});
+    }
+	
+	function getISTTime(){
+	  var istTimeStr = new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"});
+	  var tmStr = istTimeStr.split(", ")[1];
+	  return tmStr;
+	}
+	 function logme(msg){
+	  console.log(getISTTime()+"| "+msg);
+	}
+	
+	function getTodayDate() {
+		var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth() + 1;
+		var yyyy = today.getFullYear();
+		if (dd < 10) {
+			dd = '0' + dd;
 		}
-	}).listen(PORT);
-	console.log('Running:' + PORT);
-}catch(e){
-	console.log('httperr:' + e.message);
-}
-
-function getLoginToken(){
-	Wokers.fetchWriteToken(appconts.atCodeURL);
-}
-
-console.log("------------------------------------------------------------------------");  
-
-// *    *    *    *    *    *
-// ┬    ┬    ┬    ┬    ┬    ┬
-// │    │    │    │    │    │
-// │    │    │    │    │    └ day of week (0 - 7) (0 or 7 is Sun)
-// │    │    │    │    └───── month (1 - 12)
-// │    │    │    └────────── day of month (1 - 31)
-// │    │    └─────────────── hour (0 - 23)
-// │    └──────────────────── minute (0 - 59)
-// └───────────────────────── second (0 - 59, OPTIONAL)
-
-console.log("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
-
-function wakeupJOB(){
-	console.log("\n\n---------------------------------------------------------------"); 
-	Wokers.logme("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
-	Wokers.logme("wakeupJOB Started"); 
-	Wokers.wakeupServer(appconts.wakeupURL);
-}
-
-function tokenJOB(){
-	console.log("\n\n---------------------------------------------------------------"); 
-	Wokers.logme("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
-	Wokers.logme("tokenJOB Started"); 
-	getLoginToken();
-}
-
-function tradeJOB(){
-	console.log("\n\n---------------------------------------------------------------"); 
-	Wokers.logme("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
-	Wokers.logme("tradeJOB Started"); 
-	initSetToken();
-	Trader.strategyORB();
-}
-
-function scheduleTokenServerWakeup(){
-	console.log("Scheduling wakeupJOB..");  
-	scheduler.scheduleJob(appconts.wakeup_schedule, function (fireDate) {wakeupJOB();});
-}
-
-function scheduleTokenJOB(){
-	console.log("Scheduling tokenJOB..");  
-	scheduler.scheduleJob(appconts.wakeup_schedule, function (fireDate) {tokenJOB();});
-}
-
-function scheduleTradeJOB(){
-	console.log("Scheduling tradeJOB..");
-	scheduler.scheduleJob(appconts.trade_schedule, function (fireDate) {tradeJOB();});
-}
-
-function rescheduleAllJobs(){
-	scheduleTokenServerWakeup();
-	scheduleTokenJOB();
-	scheduleTradeJOB();
-}rescheduleAllJobs();
+		if (mm < 10) {
+			mm = '0' + mm;
+		}
+		return (dd + '-' + mm + '-' + yyyy);
+	}
+	
+	module.exports.getTodayDate = getTodayDate;
+	module.exports.readToken = readToken;
+	module.exports.logme = logme;
+}());
