@@ -6,7 +6,7 @@
 		let client = httpc;
 		if (url.toString().indexOf("https") === 0) {client = httpsc;}
 		var data="";
-		logme("Connecting..");
+		logme("Connecting to token server..");
 		client.get(url, (resp) => {
 			resp.on('data', (chunk) => { data += chunk; });
 			resp.on('end', () => {
@@ -53,6 +53,21 @@
 	  console.log(getISTTime()+"| "+msg);
 	}
 	
+	function getTodayDate() {
+		var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth() + 1;
+		var yyyy = today.getFullYear();
+		if (dd < 10) {
+			dd = '0' + dd;
+		}
+		if (mm < 10) {
+			mm = '0' + mm;
+		}
+		return (dd + '-' + mm + '-' + yyyy);
+	}
+	
+	module.exports.getTodayDate = getTodayDate;
 	module.exports.readToken = readToken;
 	module.exports.logme = logme;
 }());
