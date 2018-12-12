@@ -8,8 +8,8 @@
 	var upstox = new Upstox(appconts.appKey, appconts.appSecret);
 	upstox.setApiVersion(upstox.Constants.VERSIONS.Version_1_5_6);
 	
-	var n50 = appconts.getN50();
-	var nfo = appconts.getAllNFO();
+	var n50 = Appconst.getN50();
+	var nfo = Appconst.getAllNFO();
 	
 	var qty = process.env.TQTY;
 	var trigger_offset = 0.15;
