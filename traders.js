@@ -184,7 +184,7 @@
 		})
 		.catch(function (error) {
 			//done(error);
-			Worker.logme(JSON.stringify(error));
+			Worker.logme("PlaceOrder::"+JSON.stringify(error));
 		  //Worker.logme(ordr.sym+"|"+error.message+"|"+error.error.reason)
 		});
 	  });
@@ -209,7 +209,7 @@
 		  Worker.logme("Position Updated. "+JSON.stringify(message));
 		});
 		upstox.on("tradeUpdate", function(message) {
-		  Worker.logme("Trade Updated. " + JSON.stringify(message));
+		  //Worker.logme("Trade Updated. " + JSON.stringify(message));
 		});
 		upstox.on("liveFeed", function(message) {
 		  //Worker.logme("Live Feed. - " + JSON.stringify(message));
