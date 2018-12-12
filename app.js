@@ -33,5 +33,5 @@ var upstox = new Upstox(appconts.appKey, appconts.appSecret);
 upstox.setApiVersion(upstox.Constants.VERSIONS.Version_1_5_6);
 
 function getLoginToken(){
-	Wokers.fetchWriteToken();
+	Wokers.fetchWriteToken(appconts.getCodeWrite);
 }
