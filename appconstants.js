@@ -3,11 +3,15 @@
 		appKey:process.env.APPKEY,
 		appSecret:process.env.APPSECRET,
 		redirectURL:process.env.RDRURL,
-		atCodeURL:process.env.ATCODEURL,
+		atCodeURL:process.env.ATCODEURL || "http://tradz.herokuapp.com/getCode",
 		getCodeCommand:process.env.GETCODECMD,
 		token_schedule:process.env.TOKENJOB,
 		trade_schedule:process.env.TRADEJOB,
-		getCodeWrite:process.env.GETCODEWRITE
+		wakeup_schedule:process.env.WAKEJOB,
+		getCodeWrite:process.env.GETCODEWRITE || "getCode",
+		readRawCode:process.env.READCODE || "readCode",
+		wakeupURL:process.env.WAKEURL || "http://tradz.herokuapp.com/getCode",
+		
 	};
 	
 	var n50 = [
