@@ -7,7 +7,7 @@
 		getCodeCommand:process.env.GETCODECMD,
 		token_schedule:process.env.TOKENJOB,
 		trade_schedule:process.env.TRADEJOB,
-		getCodeWrite::process.env.GETCODEWRITE
+		getCodeWrite:process.env.GETCODEWRITE
 	};
 	
 	var n50 = [
