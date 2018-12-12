@@ -18,12 +18,13 @@
 	function initSetToken(){
 		fs.readFile("/data/token.txt", "utf8", function(err, data){
 		//fs.readFile("D:\\token.txt", "utf8", function(err, data){
-			if(err) { return "file read error"; logme("file read error in traders.js"); }
+			if(err) { return "file read error"; logme("file read error in traders.js"); } 
+			if(isJsonString(data)){
 			var codeData = JSON.parse(data);
 			upstox.setToken(codeData.token);
 			invokeSocket();
 			Worker.logme("Token set.. --"+codeData.token);
-			Worker.logme("Socket invoked..");
+			Worker.logme("Socket invoked..");}else{Worker.logme("token file parse error");}
 		});
 
 	}
@@ -230,7 +231,13 @@
 			return (a[p] > b[p]) ? 1 : (a[p] < b[p]) ? -1 : 0;
 		});
 	}
-	
+	function isJsonString(str) {
+try {
+  var json = JSON.parse(str);
+  return (typeof json === 'object');
+} catch (e) {
+  return false;
+}
 	initSetToken();
 	module.exports.initSetToken = initSetToken;
 	module.exports.strategyORB = function(){
