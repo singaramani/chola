@@ -230,6 +230,7 @@
 			return (a[p] > b[p]) ? 1 : (a[p] < b[p]) ? -1 : 0;
 		});
 	}
+	
 	initSetToken();
 	module.exports.initSetToken = initSetToken;
 	module.exports.strategyORB = function(){
