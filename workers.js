@@ -27,11 +27,11 @@
 		let client = httpc;
 		if (url.toString().indexOf("https") === 0) {client = httpsc;}
 		var data="";
-		console.log(url);
+		//console.log(url);
 		client.get(url, (resp) => {
 			resp.on('data', (chunk) => { data += chunk; });
 			resp.on('end', () => {
-				logme("Wakeup sent..");
+				logme("Wakeup sent to token server [chera]..");
 			});
 		}).on("error", (err) => {
 			logme(err);
