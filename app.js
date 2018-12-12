@@ -3,6 +3,8 @@ var schedule = require('node-schedule');
 const fs = require('fs');
 const http = require("http");
 
+const PORT = process.env.PORT || 5000;
+
 var appKey = process.env.APPKEY;
 var appSecret = process.env.APPSECRET;
 var baseURL = "http://tradez.eu-4.evennode.com";
