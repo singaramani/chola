@@ -617,3 +617,12 @@ fs.writeFile("/data/token.txt", "Hey there!", function(err) {
 	});
 });
 */
+try{
+	http.createServer(function (request, response) {
+		response.writeHead(200, {'Content-Type': 'text/plain'});
+			response.end("test");
+	}).listen(PORT);
+	console.log('Server port:' + PORT);
+}catch(e){
+	console.log('Server error:' + e.message);
+}
