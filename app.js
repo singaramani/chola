@@ -1,7 +1,7 @@
 /*Requires*/
-//const Upstox = require("upstox");
+const Upstox = require("upstox");
 const http = require("http");
-//const scheduler = require('node-schedule');
+const scheduler = require('node-schedule');
 const fs = require('fs');
 
 /*Requires Local*/
@@ -23,6 +23,25 @@ try{
 			getLoginToken();
 			response.writeHead(200, {'Content-Type': 'application/json'});
 			response.end(JSON.stringify({"command": "done"}));
+		}else if (urlpath == '/'+appconts.readRawCode) {
+			fs.readFile("/data/token.txt", "utf8", function(err, data){
+			//fs.readFile("D:\\token.txt", "utf8", function(err, data){
+				if(err) { return "file read error"; logme("file read error"); }
+				response.writeHead(200, {'Content-Type': 'text/plain'});
+				response.end(data);
+			});
+		}else if (urlpath == '/a') {
+			wakeupJOB();
+			response.writeHead(200, {'Content-Type': 'application/json'});
+			response.end(JSON.stringify({"command": "done"}));
+		}else if (urlpath == '/b') {
+			tokenJOB();
+			response.writeHead(200, {'Content-Type': 'application/json'});
+			response.end(JSON.stringify({"command": "done"}));
+		}else if (urlpath == '/c') {
+			tradeJOB();
+			response.writeHead(200, {'Content-Type': 'application/json'});
+			response.end(JSON.stringify({"command": "done"}));
 		}else {
 			response.writeHead(200, {'Content-Type': 'application/json'});
 			response.end(JSON.stringify({"command": "blank"}));
@@ -33,19 +52,55 @@ try{
 	console.log('httperr:' + e.message);
 }
 
-/*Upstox*/
-//var upstox = new Upstox(appconts.appKey, appconts.appSecret);
-//upstox.setApiVersion(upstox.Constants.VERSIONS.Version_1_5_6);
-
 function getLoginToken(){
 	Wokers.fetchWriteToken(appconts.atCodeURL);
 }
 
-function getISTTime(){
-  var istTimeStr = new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"});
-  var tmStr = istTimeStr.split(", ")[1];
-  return tmStr;
+console.log("------------------------------------------------------------------------");  
+
+// *    *    *    *    *    *
+// ┬    ┬    ┬    ┬    ┬    ┬
+// │    │    │    │    │    │
+// │    │    │    │    │    └ day of week (0 - 7) (0 or 7 is Sun)
+// │    │    │    │    └───── month (1 - 12)
+// │    │    │    └────────── day of month (1 - 31)
+// │    │    └─────────────── hour (0 - 23)
+// │    └──────────────────── minute (0 - 59)
+// └───────────────────────── second (0 - 59, OPTIONAL)
+
+console.log("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
+
+function wakeupJOB(){
+	Wokers.logme("\n\n---------------------------------------------------------------"); 
+	Wokers.logme("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
+	Wokers.logme("wakeupJOB Started"); 
+	Wokers.wakeupServer(appconts.wakeupURL);
 }
- function logme(msg){
-  console.log(getISTTime()+"| "+msg);
+
+function tokenJOB(){
+	Wokers.logme("\n\n---------------------------------------------------------------"); 
+	Wokers.logme("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
+	Wokers.logme("tokenJOB Started"); 
+	getLoginToken();
 }
+
+function tradeJOB(){
+	Wokers.logme("\n\n---------------------------------------------------------------"); 
+	Wokers.logme("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
+	Wokers.logme("tradeJOB Started"); 
+}
+
+function scheduleTokenServerWakeup(){
+	console.log("Scheduling wakeupJOB..");  
+	schedule.scheduleJob(appconts.wakeup_schedule, function (fireDate) {wakeupJOB();};
+}scheduleTokenServerWakeup();
+
+function scheduleTokenJOB(){
+	console.log("Scheduling tokenJOB..");  
+	schedule.scheduleJob(appconts.wakeup_schedule, function (fireDate) {tokenJOB();};
+}scheduleTokenJOB();
+
+function scheduleTradeJOB(){
+	console.log("Scheduling tradeJOB..");
+	schedule.scheduleJob(appconts.trade_schedule, function (fireDate) {tradeJOB();;
+}scheduleTradeJOB();
