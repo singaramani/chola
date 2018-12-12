@@ -1,5 +1,4 @@
 /*Requires*/
-const Upstox = require("upstox");
 const http = require("http");
 const scheduler = require('node-schedule');
 const fs = require('fs');
@@ -7,6 +6,7 @@ const fs = require('fs');
 /*Requires Local*/
 const Appconst = require("./appconstants");
 const Wokers = require("./workers");
+const Trader = require("./traders");
 
 /*Vars*/
 const PORT = process.env.PORT || 8080;
@@ -29,6 +29,7 @@ try{
 				if(err) { return "file read error"; logme("file read error"); }
 				response.writeHead(200, {'Content-Type': 'text/plain'});
 				response.end(data);
+				Wokers.logme("Web read code invoked.")
 			});
 		}else if (urlpath == '/a') {
 			wakeupJOB();
@@ -71,23 +72,24 @@ console.log("-------------------------------------------------------------------
 console.log("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
 
 function wakeupJOB(){
-	Wokers.logme("\n\n---------------------------------------------------------------"); 
+	console.log("\n\n---------------------------------------------------------------"); 
 	Wokers.logme("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
 	Wokers.logme("wakeupJOB Started"); 
 	Wokers.wakeupServer(appconts.wakeupURL);
 }
 
 function tokenJOB(){
-	Wokers.logme("\n\n---------------------------------------------------------------"); 
+	console.log("\n\n---------------------------------------------------------------"); 
 	Wokers.logme("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
 	Wokers.logme("tokenJOB Started"); 
 	getLoginToken();
 }
 
 function tradeJOB(){
-	Wokers.logme("\n\n---------------------------------------------------------------"); 
+	console.log("\n\n---------------------------------------------------------------"); 
 	Wokers.logme("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
 	Wokers.logme("tradeJOB Started"); 
+	Trader.strategyORB();
 }
 
 function scheduleTokenServerWakeup(){
