@@ -104,7 +104,7 @@ function scheduleTokenServerWakeup(){
 
 function scheduleTokenJOB(){
 	console.log("Scheduling tokenJOB..");  
-	scheduler.scheduleJob(appconts.wakeup_schedule, function (fireDate) {tokenJOB();});
+	scheduler.scheduleJob(appconts.token_schedule, function (fireDate) {tokenJOB();});
 }
 
 function scheduleTradeJOB(){
