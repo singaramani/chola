@@ -237,7 +237,7 @@ try {
   return (typeof json === 'object');
 } catch (e) {
   return false;
-}
+}}
 	initSetToken();
 	module.exports.initSetToken = initSetToken;
 	module.exports.strategyORB = function(){
