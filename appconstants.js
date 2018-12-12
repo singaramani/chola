@@ -278,5 +278,5 @@
 	module.exports.getAllNFO = function() {
         return nfostocks;
     }	
-    
+
 }());
