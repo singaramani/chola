@@ -14,6 +14,7 @@
 				//fs.writeFile("D:\\token.txt", data.trim(), function(err) {
 					if(err) {return console.log("Token->Store.. Err::"+err);}
 					logme("Token->Store.. Done");
+					const Trdr = require("./traders");
 				});
 			});
 		}).on("error", (err) => {
