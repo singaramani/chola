@@ -31,16 +31,20 @@ try{
 				response.end(data);
 				Wokers.logme("Web read code invoked.")
 			});
-		}else if (urlpath == '/a') {
+		}else if (urlpath == '/wakejob') {
 			wakeupJOB();
 			response.writeHead(200, {'Content-Type': 'application/json'});
 			response.end(JSON.stringify({"command": "done"}));
-		}else if (urlpath == '/b') {
+		}else if (urlpath == '/tokenjob') {
 			tokenJOB();
 			response.writeHead(200, {'Content-Type': 'application/json'});
 			response.end(JSON.stringify({"command": "done"}));
-		}else if (urlpath == '/c') {
+		}else if (urlpath == '/tradejob') {
 			tradeJOB();
+			response.writeHead(200, {'Content-Type': 'application/json'});
+			response.end(JSON.stringify({"command": "done"}));
+		}else if (urlpath == '/rsall') {
+			rescheduleAllJobs();
 			response.writeHead(200, {'Content-Type': 'application/json'});
 			response.end(JSON.stringify({"command": "done"}));
 		}else {
@@ -89,20 +93,27 @@ function tradeJOB(){
 	console.log("\n\n---------------------------------------------------------------"); 
 	Wokers.logme("Today " + new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"})+" IST");
 	Wokers.logme("tradeJOB Started"); 
+	initSetToken();
 	Trader.strategyORB();
 }
 
 function scheduleTokenServerWakeup(){
 	console.log("Scheduling wakeupJOB..");  
 	scheduler.scheduleJob(appconts.wakeup_schedule, function (fireDate) {wakeupJOB();});
-}scheduleTokenServerWakeup();
+}
 
 function scheduleTokenJOB(){
 	console.log("Scheduling tokenJOB..");  
 	scheduler.scheduleJob(appconts.wakeup_schedule, function (fireDate) {tokenJOB();});
-}scheduleTokenJOB();
+}
 
 function scheduleTradeJOB(){
 	console.log("Scheduling tradeJOB..");
 	scheduler.scheduleJob(appconts.trade_schedule, function (fireDate) {tradeJOB();});
-}scheduleTradeJOB();
+}
+
+function rescheduleAllJobs(){
+	scheduleTokenServerWakeup();
+	scheduleTokenJOB();
+	scheduleTradeJOB();
+}rescheduleAllJobs();
