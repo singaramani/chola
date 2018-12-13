@@ -185,8 +185,8 @@
 		})
 		.catch(function (error) {
 			//done(error);
-			Worker.logme("PlaceOrder::"+JSON.stringify(error));
-		  //Worker.logme(ordr.sym+"|"+error.message+"|"+error.error.reason)
+			//Worker.logme("PlaceOrder::"+JSON.stringify(error));
+			//Worker.logme(ordr.sym+"|"+error.message+"|"+error.error.reason)
 		});
 	  });
 	}
@@ -222,7 +222,7 @@
 		  Worker.logme("Socket on_error:" + JSON.stringify(error));
 		});
 	  }).catch(function(err) {
-		Worker.logme("Socket error:" + JSON.stringify(err));
+		//Worker.logme("Socket error:" + JSON.stringify(err));
 	  });
 	}
 	
@@ -232,12 +232,14 @@
 		});
 	}
 	function isJsonString(str) {
-try {
-  var json = JSON.parse(str);
-  return (typeof json === 'object');
-} catch (e) {
-  return false;
-}}
+		try {
+		  var json = JSON.parse(str);
+		  return (typeof json === 'object');
+		} catch (e) {
+		  return false;
+		}
+	}
+	
 	initSetToken();
 	module.exports.initSetToken = initSetToken;
 	module.exports.strategyORB = function(){
