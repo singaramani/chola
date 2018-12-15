@@ -97,6 +97,21 @@ function tradeJOB(){
 	Trader.strategyORB();
 }
 
+function positionJOB(){
+	Worker.logme("Getting positions.."); 
+	Trader.getCurrentPos();
+}
+
+function exitPosJOB(){
+	//Worker.logme("Getting positions.."); 
+	Trader.exitAllPos();
+}
+
+function disconSockJOB(){
+	//Worker.logme("Getting positions.."); 
+	Trader.diconnectSock();
+}
+
 function scheduleTokenServerWakeup(){
 	console.log("Scheduling wakeupJOB..");  
 	scheduler.scheduleJob(appconts.wakeup_schedule, function (fireDate) {wakeupJOB();});
@@ -112,8 +127,26 @@ function scheduleTradeJOB(){
 	scheduler.scheduleJob(appconts.trade_schedule, function (fireDate) {tradeJOB();});
 }
 
+function schedulePositionJOB(){
+	console.log("Scheduling positionJOB..");
+	scheduler.scheduleJob("30 4-10 * * 1-5", function (fireDate) {positionJOB();});
+}
+
+function scheduleExitPosJOB(){
+	console.log("Scheduling exitPosJOB..");
+	scheduler.scheduleJob("43 9 * * 1-5", function (fireDate) {exitPosJOB();});
+}
+
+function scheduleDisconnectSockJOB(){
+	console.log("Scheduling disconSockJOB..");
+	scheduler.scheduleJob("1 10 * * 1-5", function (fireDate) {disconSockJOB();});
+}
+
 function rescheduleAllJobs(){
 	scheduleTokenServerWakeup();
 	scheduleTokenJOB();
 	scheduleTradeJOB();
+	schedulePositionJOB();
+	scheduleExitPosJOB();
+	scheduleDisconnectSockJOB();
 }rescheduleAllJobs();

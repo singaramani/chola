@@ -77,7 +77,7 @@
 	function getHighLow(sList, tf) {
 		Worker.logme("Identifying first " + tf + "min HL");
 		var _promiseArray = [];
-		var ftf = tf / 5;
+		var ftf = (tf / 5)+1;
 		sList.forEach(function (scrip) {
 			var _scripPromise = new Promise(function (resolve, reject) {
 					upstox.getOHLC({
@@ -94,7 +94,7 @@
 						var all_max15 = [];
 						var all_min15 = [];
 						if (ohlc5data.length >= ftf) {
-							for (i = 0; i < ftf; i++) {
+							for (i = 1; i < ftf; i++) {
 								all_max15.push(ohlc5data[i].high);
 								all_min15.push(ohlc5data[i].low);
 							}
@@ -201,6 +201,7 @@
 		  }
 		  if(message.status=="complete"){
 			Worker.logme(message.order_id+" - Completed : "+message.symbol+" "+message.traded_quantity+"@"+message.average_price);
+			placeTargerOrder(message);
 		  }		
 		  if(message.status=="cancelled"){
 			Worker.logme(message.order_id+" - Cancelled : "+message.symbol+" "+message.traded_quantity+"@"+message.average_price);
@@ -240,10 +241,105 @@
 		}
 	}
 	
+	function placeTargerOrder(pos){
+	 Worker.logme("Placing target for "+pos.symbol+" "+pos.traded_quantity+" @ "+"[1.5%]);
+	 upstox.placeOrder({
+			"transaction_type": (pos.transaction_type=="B")?"s":"b",
+			"exchange": pos.exchange,
+			"symbol": pos.symbol,
+			"quantity": pos.traded_quantity,
+			"order_type": "l",
+			"product": "I",
+			"price":(Math.round((pos.average_price)*1.015*20)/20)
+		})
+		.then(function (response) {
+			Worker.logme(""+response.data.order_id + "|" + pos.symbol + "|" + response.data.status);
+		})
+		.catch(function (error) {
+			//done(error);
+			Worker.logme(JSON.stringify(error));
+		});
+	}
+	
+	function cancellAllOrders(){
+	  upstox.cancelAllOrder({})
+	  .then(function (response){
+		  Worker.logme(response.message);
+		  Worker.logme("Orders:"+response.data);
+	  }).catch(function(error){
+	   //done(error);
+	   Worker.logme("Error cancelling all orders at once");
+	  });
+	}
+	
+	function getCurrentPos(){
+		upstox.getPositions()
+		.then(function (response){
+		 var tPos = response.data;
+		 var mtm = 0;
+		 Worker.logme("----------------------");
+		 tPos.forEach(function (pos) {
+		  var pnl = 0;
+		  if(pos.realized_profit && !isNaN(pos.realized_profit)){
+		   pnl = pnl + Number(pos.realized_profit);
+		  }
+		  if(pos.unrealized_profit && !isNaN(pos.unrealized_profit)){
+		   pnl = pnl + Number(pos.unrealized_profit);
+		   Worker.logme(pos.symbol + "|" + pos.net_quantity + "|" + pnl);
+		   mtm = mtm + pnl;
+		  }
+		 });
+		 Worker.logme("----------------------");
+		 Worker.logme("MTM:"+mtm);
+		 Worker.logme("----------------------");
+		}).catch(function(error){
+		 //done(error);
+		 Worker.logme("Error getting positions");
+		});
+	}
+	
+	function exitAllPos(){
+	 upstox.getPositions()
+		.then(function (response){
+		 var tPos = response.data;
+		 Worker.logme("Exiting all open positions..");
+		 tPos.forEach(function (pos) {
+		  if(pos.net_quantity!=0){
+		   upstox.placeOrder({
+			"transaction_type": (pos.net_quantity>0)?"s":"b",
+			"exchange": pos.exchange,
+			"symbol": pos.symbol,
+			"quantity": pos.net_quantity,
+			"order_type": "m",
+			"product": "I"
+		})
+		.then(function (response) {
+			Worker.logme(response.data.order_id + "|" + pos.symbol + "|" + response.data.status);
+		})
+		.catch(function (error) {
+			//done(error);
+			Worker.logme(JSON.stringify(error));
+		});
+		  }
+		 });
+		}).catch(function(error){
+		 //done(error);
+		 Worker.logme("Error getting positions");
+		});
+	}
+	
+	function diconnectSock(){
+	 upstox.closeSocket();
+	}
+
+	
 	initSetToken();
 	module.exports.initSetToken = initSetToken;
 	module.exports.strategyORB = function(){
 		selectScrips_HL(n50,3,"N50");
 		//selectScrips_HL(nfo,3, "ALL_FNO");
 	}
+	module.exports.getCurrentPos = getCurrentPos;
+	module.exports.exitAllPos = exitAllPos;
+	module.exports.diconnectSock = diconnectSock;
 }());
