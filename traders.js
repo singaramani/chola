@@ -242,7 +242,7 @@
 	}
 	
 	function placeTargerOrder(pos){
-	 Worker.logme("Placing target for "+pos.symbol+" "+pos.traded_quantity+" @ "+"[1.5%]);
+	 Worker.logme("Placing target for "+pos.symbol+" "+pos.traded_quantity+" @ "+"[1.5%]");
 	 upstox.placeOrder({
 			"transaction_type": (pos.transaction_type=="B")?"s":"b",
 			"exchange": pos.exchange,
