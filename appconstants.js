@@ -15,7 +15,8 @@
 		cancelall_schedule:process.env.CANCELALLJOB,
 		exitpos_schedule:process.env.EXITPOSJOB,
 		socket_schedule:process.env.SOCKDISCONJOB,
-		stockpicks:process.env.SPICK
+		stockpicks:process.env.SPICK,
+		targetpcent:process.env.TRGTPCENT
 	};
 	
 	var n50 = [
