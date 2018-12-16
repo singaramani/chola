@@ -10,20 +10,20 @@ const Trader = require("./traders");
 
 /*Vars*/
 const PORT = process.env.PORT || 8080;
-var appconts = Appconst.getAppConstants();
+var appconst = Appconst.getAppConstants();
 
 /*Handling HTTP Req*/
 try {
 	http.createServer(function (request, response) {
 		var urlpath = request.url.split("?").shift();
-		if (urlpath == '/' + appconts.getCodeCommand) {
+		if (urlpath == '/' + appconst.getCodeCommand) {
 			response.writeHead(200, {'Content-Type': 'application/json'});
 			response.end(JSON.stringify({"command": "done"}));
-		} else if (urlpath == '/' + appconts.getCodeWrite) {
+		} else if (urlpath == '/' + appconst.getCodeWrite) {
 			getLoginToken();
 			response.writeHead(200, {'Content-Type': 'application/json'});
 			response.end(JSON.stringify({"command": "done"}));
-		} else if (urlpath == '/' + appconts.readRawCode) {
+		} else if (urlpath == '/' + appconst.readRawCode) {
 			fs.readFile("/data/token.txt", "utf8", function (err, data) {
 				//fs.readFile("D:\\token.txt", "utf8", function(err, data){
 				if (err) {
@@ -77,7 +77,7 @@ try {
 }
 
 function getLoginToken() {
-	Worker.fetchWriteToken(appconts.atCodeURL);
+	Worker.fetchWriteToken(appconst.atCodeURL);
 }
 
 console.log("------------------------------------------------------------------------");
@@ -102,7 +102,7 @@ function wakeupJOB() {
 			timeZone: "Asia/Kolkata"
 		}) + " IST");
 	Worker.logme("wakeupJOB Started");
-	Worker.wakeupServer(appconts.wakeupURL);
+	Worker.wakeupServer(appconst.wakeupURL);
 }
 
 function tokenJOB() {
@@ -150,49 +150,49 @@ function disconSockJOB() {
 
 function scheduleTokenServerWakeup() {
 	console.log("Scheduling wakeupJOB..");
-	scheduler.scheduleJob(appconts.wakeup_schedule, function (fireDate) {
+	scheduler.scheduleJob(appconst.wakeup_schedule, function (fireDate) {
 		wakeupJOB();
 	});
 }
 
 function scheduleTokenJOB() {
 	console.log("Scheduling tokenJOB.. ");
-	scheduler.scheduleJob(appconts.token_schedule, function (fireDate) {
+	scheduler.scheduleJob(appconst.token_schedule, function (fireDate) {
 		tokenJOB();
 	});
 }
 
 function scheduleTradeJOB() {
 	console.log("Scheduling tradeJOB.. ");
-	scheduler.scheduleJob(appconts.trade_schedule, function (fireDate) {
+	scheduler.scheduleJob(appconst.trade_schedule, function (fireDate) {
 		tradeJOB();
 	});
 }
 
 function schedulePositionJOB() {
 	console.log("Scheduling positionJOB.. ");
-	scheduler.scheduleJob(appconts.getpos_schedule, function (fireDate) {
+	scheduler.scheduleJob(appconst.getpos_schedule, function (fireDate) {
 		positionJOB();
 	});
 }
 
 function scheduleCancelAppOpenJOB() {
 	console.log("Scheduling cancelAllOpenJOB.. ");
-	scheduler.scheduleJob(appconts.cancelall_schedule, function (fireDate) {
+	scheduler.scheduleJob(appconst.cancelall_schedule, function (fireDate) {
 		cancelAllOrdersJOB();
 	});
 }
 
 function scheduleExitPosJOB() {
 	console.log("Scheduling exitPosJOB.. ");
-	scheduler.scheduleJob(appconts.exitpos_schedule, function (fireDate) {
+	scheduler.scheduleJob(appconst.exitpos_schedule, function (fireDate) {
 		exitPosJOB();
 	});
 }
 
 function scheduleDisconnectSockJOB() {
 	console.log("Scheduling disconSockJOB.. ");
-	scheduler.scheduleJob(appconts.socket_schedule, function (fireDate) {
+	scheduler.scheduleJob(appconst.socket_schedule, function (fireDate) {
 		disconSockJOB();
 	});
 }
