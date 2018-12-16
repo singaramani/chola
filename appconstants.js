@@ -3,15 +3,16 @@
 		appKey:process.env.APPKEY,
 		appSecret:process.env.APPSECRET,
 		redirectURL:process.env.RDRURL,
-		atCodeURL:process.env.ATCODEURL,
+		atCodeURL:process.env.ATCODEURL || "http://tradz.herokuapp.com/getCode",
 		getCodeCommand:process.env.GETCODECMD,
-		getCodeWrite:process.env.GETCODEWRITE,
-		readRawCode:process.env.READCODE,
-		wakeupURL:process.env.WAKEURL,
+		getCodeWrite:process.env.GETCODEWRITE || "getCodeNWrite",
+		readRawCode:process.env.READCODE || "readNCode",
+		wakeupURL:process.env.WAKEURL || "http://tradz.herokuapp.com/getCode",
 		token_schedule:process.env.TOKENJOB,
 		trade_schedule:process.env.TRADEJOB,
 		wakeup_schedule:process.env.WAKEJOB,
 		getpos_schedule:process.env.GETPOSJOB,
+		cancelall_schedule:process.env.CANCELALLJOB,
 		exitpos_schedule:process.env.EXITPOSJOB,
 		socket_schedule:process.env.SOCKDISCONJOB,
 		stockpicks:process.env.SPICK
@@ -275,15 +276,14 @@
 	];
 	
 	module.exports.getAppConstants = function() {
-        	return appConstants;
-    	}
+  		return appConstants;
+  	}
 	
 	module.exports.getN50 = function() {
-        	return n50;
-    	}
+  		return n50;
+  	}
 	
 	module.exports.getAllNFO = function() {
-        	return nfostocks;
-    	}	
-
+  		return nfostocks;
+  	}	
 }());
