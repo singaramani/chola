@@ -129,17 +129,17 @@ function scheduleTradeJOB(){
 
 function schedulePositionJOB(){
 	console.log("Scheduling positionJOB..");
-	scheduler.scheduleJob("30 4-10 * * 1-5", function (fireDate) {positionJOB();});
+	scheduler.scheduleJob("30 4-10 * * *", function (fireDate) {positionJOB();});
 }
 
 function scheduleExitPosJOB(){
 	console.log("Scheduling exitPosJOB..");
-	scheduler.scheduleJob("43 9 * * 1-5", function (fireDate) {exitPosJOB();});
+	scheduler.scheduleJob("43 9 * * *", function (fireDate) {exitPosJOB();});
 }
 
 function scheduleDisconnectSockJOB(){
 	console.log("Scheduling disconSockJOB..");
-	scheduler.scheduleJob("1 10 * * 1-5", function (fireDate) {disconSockJOB();});
+	scheduler.scheduleJob("1 10 * * *", function (fireDate) {disconSockJOB();});
 }
 
 function rescheduleAllJobs(){
