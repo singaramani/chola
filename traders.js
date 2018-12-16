@@ -356,7 +356,7 @@
 	module.exports.exitAllPos = exitAllPos;
 	module.exports.diconnectSock = diconnectSock;
 	module.exports.strategyORB = function () {
-		if(appconts.stockpicks == "N50") selectScrips_HL(n50, 3, "N50");
-		if(appconts.stockpicks == "NFO") selectScrips_HL(nfo,3, "ALL_FNO");
+		if(appconts.stockpicks == "N50") selectScrips_HL(n50, appconts.nscrips, appconts.stockpicks);
+		if(appconts.stockpicks == "NFO") selectScrips_HL(nfo, appconts.nscrips, appconts.stockpicks);
 	}	
 }());
