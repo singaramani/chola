@@ -16,14 +16,7 @@ var appconst = Appconst.getAppConstants();
 try {
 	http.createServer(function (request, response) {
 		var urlpath = request.url.split("?").shift();
-		if (urlpath == '/' + appconst.getCodeCommand) {
-			response.writeHead(200, {'Content-Type': 'application/json'});
-			response.end(JSON.stringify({"command": "done"}));
-		} else if (urlpath == '/' + appconst.getCodeWrite) {
-			getLoginToken();
-			response.writeHead(200, {'Content-Type': 'application/json'});
-			response.end(JSON.stringify({"command": "done"}));
-		} else if (urlpath == '/' + appconst.readRawCode) {
+		if (urlpath == '/' + appconst.secCode+'tokenRead') {
 			fs.readFile("/data/token.txt", "utf8", function (err, data) {
 				//fs.readFile("D:\\token.txt", "utf8", function(err, data){
 				if (err) {
@@ -34,35 +27,31 @@ try {
 				response.end(data);
 				Worker.logme("Web read code invoked.")
 			});
-		} else if (urlpath == '/wakejob') {
+		} else if (urlpath == '/' + appconst.secCode+'wakeupJob') {
 			wakeupJOB();
 			response.writeHead(200, {'Content-Type': 'application/json'});
 			response.end(JSON.stringify({"command": "done"}));
-		} else if (urlpath == '/tokenjob') {
+		} else if (urlpath == '/' + appconst.secCode+'tokenJob') {
 			tokenJOB();
 			response.writeHead(200, {'Content-Type': 'application/json'});
 			response.end(JSON.stringify({"command": "done"}));
-		} else if (urlpath == '/tradejob') {
+		} else if (urlpath == '/' + appconst.secCode+'tradeJob') {
 			tradeJOB();
 			response.writeHead(200, {'Content-Type': 'application/json'});
 			response.end(JSON.stringify({"command": "done"}));
-		} else if (urlpath == '/rsall') {
-			rescheduleAllJobs();
-			response.writeHead(200, {'Content-Type': 'application/json'});
-			response.end(JSON.stringify({"command": "done"}));
-		} else if (urlpath == '/posjob') {
+		} else if (urlpath == '/' + appconst.secCode+'posJob') {
 			positionJOB();
 			response.writeHead(200, {'Content-Type': 'application/json'});
 			response.end(JSON.stringify({"command": "done"}));
-		} else if (urlpath == '/canalljob') {
+		} else if (urlpath == '/' + appconst.secCode+'canOpenJob') {
 			cancelAllOrdersJOB();
 			response.writeHead(200, {'Content-Type': 'application/json'});
 			response.end(JSON.stringify({"command": "done"}));
-		} else if (urlpath == '/exitposjob') {
+		} else if (urlpath == '/' + appconst.secCode+'exitOpenJob') {
 			exitPosJOB();
 			response.writeHead(200, {'Content-Type': 'application/json'});
 			response.end(JSON.stringify({"command": "done"}));
-		} else if (urlpath == '/disconsockjob') {
+		} else if (urlpath == '/' + appconst.secCode+'disconSockJob') {
 			disconSockJOB();
 			response.writeHead(200, {'Content-Type': 'application/json'});
 			response.end(JSON.stringify({"command": "done"}));
