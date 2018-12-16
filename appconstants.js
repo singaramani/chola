@@ -5,12 +5,16 @@
 		redirectURL:process.env.RDRURL,
 		atCodeURL:process.env.ATCODEURL,
 		getCodeCommand:process.env.GETCODECMD,
+		getCodeWrite:process.env.GETCODEWRITE,
+		readRawCode:process.env.READCODE,
+		wakeupURL:process.env.WAKEURL,
 		token_schedule:process.env.TOKENJOB,
 		trade_schedule:process.env.TRADEJOB,
 		wakeup_schedule:process.env.WAKEJOB,
-		getCodeWrite:process.env.GETCODEWRITE,
-		readRawCode:process.env.READCODE,
-		wakeupURL:process.env.WAKEURL		
+		getpos_schedule:process.env.GETPOSJOB,
+		exitpos_schedule:process.env.EXITPOSJOB,
+		socket_schedule:process.env.SOCKDISCONJOB,
+		stockpicks:process.env.SPICK
 	};
 	
 	var n50 = [
@@ -18,7 +22,7 @@
 		{ex: "nse_eq",sym: "ASIANPAINT"},
 		{ex: "nse_eq",sym: "AXISBANK"},
 		//{ex:"nse_eq",sym:"BAJAJ-AUTO"},
-		//{ex:"nse_eq",sym:"BAJFINANCE"},
+		{ex:"nse_eq",sym:"BAJFINANCE"},
 		//{ex:"nse_eq",sym:"BAJAJFINSV"},
 		{ex: "nse_eq",sym: "BPCL"},
 		{ex: "nse_eq",sym: "BHARTIARTL"},
@@ -82,8 +86,8 @@
 		{ex:"nse_eq",sym:"ASIANPAINT"},
 		{ex:"nse_eq",sym:"AUROPHARMA"},
 		{ex:"nse_eq",sym:"AXISBANK"},
-		{ex:"nse_eq",sym:"BAJAJ-AUTO"},
-		{ex:"nse_eq",sym:"BAJAJFINSV"},
+		//{ex:"nse_eq",sym:"BAJAJ-AUTO"},
+		//{ex:"nse_eq",sym:"BAJAJFINSV"},
 		{ex:"nse_eq",sym:"BAJFINANCE"},
 		{ex:"nse_eq",sym:"BALKRISIND"},
 		{ex:"nse_eq",sym:"BANKBARODA"},
@@ -97,7 +101,7 @@
 		{ex:"nse_eq",sym:"BHARTIARTL"},
 		{ex:"nse_eq",sym:"BHEL"},
 		{ex:"nse_eq",sym:"BIOCON"},
-		{ex:"nse_eq",sym:"BOSCHLTD"},
+		//{ex:"nse_eq",sym:"BOSCHLTD"},
 		{ex:"nse_eq",sym:"BPCL"},
 		{ex:"nse_eq",sym:"BRITANNIA"},
 		{ex:"nse_eq",sym:"CADILAHC"},
@@ -123,7 +127,7 @@
 		{ex:"nse_eq",sym:"DIVISLAB"},
 		{ex:"nse_eq",sym:"DLF"},
 		{ex:"nse_eq",sym:"DRREDDY"},
-		{ex:"nse_eq",sym:"EICHERMOT"},
+		//{ex:"nse_eq",sym:"EICHERMOT"},
 		{ex:"nse_eq",sym:"ENGINERSIN"},
 		{ex:"nse_eq",sym:"EQUITAS"},
 		{ex:"nse_eq",sym:"ESCORTS"},
@@ -139,9 +143,9 @@
 		{ex:"nse_eq",sym:"GSFC"},
 		{ex:"nse_eq",sym:"HAVELLS"},
 		{ex:"nse_eq",sym:"HCLTECH"},
-		{ex:"nse_eq",sym:"HDFC"},
+		//{ex:"nse_eq",sym:"HDFC"},
 		{ex:"nse_eq",sym:"HDFCBANK"},
-		{ex:"nse_eq",sym:"HEROMOTOCO"},
+		//{ex:"nse_eq",sym:"HEROMOTOCO"},
 		{ex:"nse_eq",sym:"HEXAWARE"},
 		{ex:"nse_eq",sym:"HINDALCO"},
 		{ex:"nse_eq",sym:"HINDPETRO"},
@@ -186,7 +190,7 @@
 		{ex:"nse_eq",sym:"M&MFIN"},
 		{ex:"nse_eq",sym:"MANAPPURAM"},
 		{ex:"nse_eq",sym:"MARICO"},
-		{ex:"nse_eq",sym:"MARUTI"},
+		//{ex:"nse_eq",sym:"MARUTI"},
 		{ex:"nse_eq",sym:"MCDOWELL-N"},
 		{ex:"nse_eq",sym:"MCX"},
 		{ex:"nse_eq",sym:"MFSL"},
@@ -271,15 +275,15 @@
 	];
 	
 	module.exports.getAppConstants = function() {
-        return appConstants;
-    }
+        	return appConstants;
+    	}
 	
 	module.exports.getN50 = function() {
-        return n50;
-    }
+        	return n50;
+    	}
 	
 	module.exports.getAllNFO = function() {
-        return nfostocks;
-    }	
+        	return nfostocks;
+    	}	
 
 }());
