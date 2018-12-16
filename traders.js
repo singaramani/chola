@@ -12,9 +12,10 @@
 	var nfo = Appconst.getAllNFO();
 
 	var qty = process.env.TQTY;
-	var trigger_offset = 0.15;
-	var price_offset = 0.10;
-
+	var trigger_offset = 0.10;
+	var price_offset = 0.05;
+	var balperscrip = 0;
+	
 	function initSetToken() {
 		fs.readFile("/data/token.txt", "utf8", function (err, data) {
 			//fs.readFile("D:\\token.txt", "utf8", function(err, data){
@@ -34,7 +35,27 @@
 		});
 
 	}
-
+	
+	/* --BALQTY TODO POINTER-- */
+	/*function getPerScripBal(){
+		Worker.logme("Getting balance per scrip..");
+	        upstox.getBalance({type: "security"})
+        	.then(function(response) {
+			var bal = response.data.equity.available_margin;
+			var marginbal = bal*appconst.mexposure;
+			var totalscrips = appconst.nscrips*2*2; //no of scrips * top and bottom * both sides
+			balperscrip = Math.floor(marginbal/totalscrips);
+            	})
+		.catch(function(error) {
+            		Worker.logme("Error in getting balance. "+JSON.stringify(error));
+			Worker.logme("Setting default values..");
+			var bal = 10000.00;
+			var marginbal = bal*appconst.mexposure;
+			var totalscrips = appconst.nscrips*2*2; //no of scrips * top and bottom * both sides
+			balperscrip = Math.floor(marginbal/totalscrips);			
+        	});
+	}*/
+	
 	function selectScrips_HL(sList, n, sType) {
 		Worker.logme("Getting " + sType + " scrips pclose & open");
 		var _promiseArray = [];
@@ -138,6 +159,7 @@
 		Worker.logme("--------------------------------------------------");
 		var orderPrepArray = [];
 		scripArr.forEach(function (scrip) {
+			//qty = Math.floor(balperscrip/Number(scrip.high)); --BALQTY TODO POINTER--
 			Worker.logme(scrip.sym + "|buy above " + scrip.high + "|sell below " + scrip.low + "|qty:" + qty);
 			orderPrepArray.push({
 				txnDesc: "Sell",
