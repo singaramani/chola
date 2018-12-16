@@ -138,7 +138,7 @@ function cancelAllOrdersJOB() {
 
 function exitPosJOB() {
 	Worker.logme(" ");
-	Worker.logme("Getting positions..");
+	Worker.logme("Exiting all open positions..");
 	Trader.exitAllPos();
 }
 
