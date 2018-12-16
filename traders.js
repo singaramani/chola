@@ -318,9 +318,11 @@
 		upstox.getPositions()
 		.then(function (response) {
 			var tPos = response.data;
+			var isOpenPosAvailable = false;
 			//Worker.logme("Exiting all open positions..");
 			tPos.forEach(function (pos) {
 				if (pos.net_quantity != 0) {
+					isOpenPosAvailable = true;
 					Worker.logme(pos.symbol +" is open with " + pos.net_quantity +" qty. Exiting at market price.");
 					upstox.placeOrder({
 						"transaction_type": (pos.net_quantity > 0) ? "s" : "b",
@@ -339,6 +341,8 @@
 					});
 				}
 			});
+			if(!isOpenPosAvailable)
+				Worker.logme("No open positions available.");
 		}).catch(function (error) {
 			//done(error);
 			Worker.logme("Error getting positions for exiting. "+JSON.stringify(error));
