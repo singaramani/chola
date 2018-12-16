@@ -2,7 +2,6 @@
 	var appConstants = {
 		appKey:process.env.APPKEY,
 		appSecret:process.env.APPSECRET,
-		redirectURL:process.env.RDRURL,
 		atCodeURL:process.env.ATCODEURL,
 		getCodeCommand:process.env.GETCODECMD,
 		getCodeWrite:process.env.GETCODEWRITE,
@@ -16,7 +15,8 @@
 		exitpos_schedule:process.env.EXITPOSJOB,
 		socket_schedule:process.env.SOCKDISCONJOB,
 		stockpicks:process.env.SPICK,
-		targetpcent:process.env.TRGTPCENT
+		targetpcent:process.env.TRGTPCENT,
+		noofscrips:process.env.NOOFSCRIPS
 	};
 	
 	var n50 = [
