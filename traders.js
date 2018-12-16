@@ -280,7 +280,8 @@
 		upstox.cancelAllOrder({})
 		.then(function (response) {
 			Worker.logme(response.message);
-			Worker.logme("Orders:" + response.data);
+			if(response.data)
+				Worker.logme("Orders:" + response.data);
 		}).catch(function (error) {
 			//done(error);
 			Worker.logme("Error cancelling all orders at once. "+JSON.stringify(error));
