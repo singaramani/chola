@@ -4,8 +4,8 @@
 	const Appconst = require("./appconstants");
 	const Worker = require("./workers");
 
-	var appconts = Appconst.getAppConstants();
-	var upstox = new Upstox(appconts.appKey, appconts.appSecret);
+	var appconst = Appconst.getAppConstants();
+	var upstox = new Upstox(appconst.appKey, appconst.appSecret);
 	upstox.setApiVersion(upstox.Constants.VERSIONS.Version_1_5_6);
 
 	var n50 = Appconst.getN50();
@@ -255,9 +255,9 @@
 
 	function placeTargerOrder(pos) {
 		var txtTyp = (pos.transaction_type == "B" || pos.transaction_type == "b") ? "s" : "b";
-		var calc_tp = (txtTyp == "b") ? 1-(appconts.targetpcent/100) : 1+(appconts.targetpcent/100);
+		var calc_tp = (txtTyp == "b") ? 1-(appconst.targetpcent/100) : 1+(appconst.targetpcent/100);
 		var tp = (Math.round((pos.average_price) * calc_tp * 20) / 20);
-		Worker.logme("Placing target order for " + pos.symbol + " " + txtTyp + " " + pos.traded_quantity + " @ " + tp + " ["+appconts.targetpcent+"%]");
+		Worker.logme("Placing target order for " + pos.symbol + " " + txtTyp + " " + pos.traded_quantity + " @ " + tp + " ["+appconst.targetpcent+"%]");
 		upstox.placeOrder({
 			"transaction_type": txtTyp,
 			"exchange": pos.exchange,
@@ -356,7 +356,7 @@
 	module.exports.exitAllPos = exitAllPos;
 	module.exports.diconnectSock = diconnectSock;
 	module.exports.strategyORB = function () {
-		if(appconts.stockpicks == "N50") selectScrips_HL(n50, appconts.nscrips, appconts.stockpicks);
-		if(appconts.stockpicks == "NFO") selectScrips_HL(nfo, appconts.nscrips, appconts.stockpicks);
+		if(appconst.stockpicks == "N50") selectScrips_HL(n50, appconst.nscrips, appconst.stockpicks);
+		if(appconst.stockpicks == "NFO") selectScrips_HL(nfo, appconst.nscrips, appconst.stockpicks);
 	}	
 }());
