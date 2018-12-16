@@ -192,7 +192,7 @@
 			.catch(function (error) {
 				//done(error);
 				//Worker.logme("PlaceOrder::"+JSON.stringify(error));
-				//Worker.logme(ordr.sym+"|"+error.message+"|"+error.error.reason)
+				try {Worker.logme(ordr.sym+"|"+error.message+"|"+error.error.reason)}catch(e){}
 			});
 		});
 	}
@@ -292,7 +292,7 @@
 		.then(function (response) {
 			var tPos = response.data;
 			var mtm = 0;
-			Worker.logme("MTM--------------------------------------------");
+			Worker.logme("--------------------------------------------");
 			tPos.forEach(function (pos) {
 				var pnl = 0;
 				if (pos.realized_profit && !isNaN(pos.realized_profit)) {
