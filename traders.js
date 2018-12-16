@@ -292,9 +292,10 @@
 		upstox.getPositions()
 		.then(function (response) {
 			var tPos = response.data;
-			var mtm = 0;
+			var mtm = 0; var isOpenPos = false;
 			Worker.logme("--------------------------------------------");
 			tPos.forEach(function (pos) {
+				isOpenPos = true;
 				var pnl = 0;
 				if (pos.realized_profit && !isNaN(pos.realized_profit)) {
 					pnl = pnl + Number(pos.realized_profit);
@@ -305,6 +306,8 @@
 				Worker.logme(pos.symbol + " | " + pos.net_quantity + " | " + pnl);
 				mtm = mtm + pnl;
 			});
+			if(!isOpenPo)
+				Worker.logme("No open positions available.");
 			Worker.logme("--------------------------------------------");
 			Worker.logme("MTM: " + mtm);
 			Worker.logme("--------------------------------------------");
