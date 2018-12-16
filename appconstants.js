@@ -16,7 +16,7 @@
 		socket_schedule:process.env.SOCKDISCONJOB,
 		stockpicks:process.env.SPICK,
 		targetpcent:process.env.TRGTPCENT,
-		noofscrips:process.env.NOOFSCRIPS
+		nscrips:process.env.NOOFSCRIPS
 	};
 	
 	var n50 = [
@@ -277,14 +277,15 @@
 	];
 	
 	module.exports.getAppConstants = function() {
-  		return appConstants;
-  	}
+        	return appConstants;
+    	}
 	
 	module.exports.getN50 = function() {
-  		return n50;
-  	}
+        	return n50;
+    	}
 	
 	module.exports.getAllNFO = function() {
-  		return nfostocks;
-  	}	
+        	return nfostocks;
+    	}	
+
 }());
