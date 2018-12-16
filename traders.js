@@ -351,7 +351,8 @@
 
 	function diconnectSock() {
 		upstox.closeSocket();
-		console.log("\n\nDone.\n\n---------------------------------------------------------------");
+		Worker.logme("Done.");
+		Worker.logme("---------------------------------------------------------------");
 	}
 
 	initSetToken();
