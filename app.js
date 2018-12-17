@@ -17,7 +17,7 @@ try {
 	http.createServer(function (request, response) {
 		var urlpath = request.url.split("?").shift();
 		if (urlpath == '/' + appconst.secCode+'tokenRead') {
-			fs.readFile("/data/token.txt", "utf8", function (err, data) {
+			fs.readFile(appconst.tokenfile, "utf8", function (err, data) {
 				//fs.readFile("D:\\token.txt", "utf8", function(err, data){
 				if (err) {
 					return "file read error";
