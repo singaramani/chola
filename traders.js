@@ -328,7 +328,7 @@
 				Worker.logme(pos.symbol + " | " + pos.net_quantity + " | " + pnl);
 				mtm = mtm + pnl;
 			});
-			if(!isOpenPo)
+			if(!isOpenPos)
 				Worker.logme("No open positions available.");
 			Worker.logme("--------------------------------------------");
 			Worker.logme("MTM: " + mtm);
