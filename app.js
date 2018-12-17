@@ -134,7 +134,6 @@ function exitPosJOB() {
 }
 
 function disconSockJOB() {
-	Worker.logme(" ");
 	Worker.logme("Disconnecting socket..");
 	Trader.diconnectSock();
 }
