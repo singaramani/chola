@@ -368,7 +368,7 @@
 				}
 			});
 			if(!isOpenPosAvailable)
-				Worker.logme("No open positions available.");
+				Worker.logme("No open positions available");
 		}).catch(function (error) {
 			//done(error);
 			Worker.logme("Error getting positions for exiting. "+JSON.stringify(error));
