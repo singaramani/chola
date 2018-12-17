@@ -282,7 +282,7 @@
 		var txtTyp = (pos.transaction_type == "B" || pos.transaction_type == "b") ? "s" : "b";
 		var calc_tp = (txtTyp == "b") ? 1-(appconst.targetpcent/100) : 1+(appconst.targetpcent/100);
 		var tp = (Math.round((pos.average_price) * calc_tp * 20) / 20);
-		Worker.logme("Placing target order for " + pos.symbol + " " + txtTyp + " " + pos.traded_quantity + " @ " + tp + " ["+appconst.targetpcent+"%]");
+		Worker.logme("Placing target order for " + txtTyp.toUpperCase() + " " + pos.symbol + " " + pos.traded_quantity + " @ " + tp + " ["+appconst.targetpcent+"%]");
 		upstox.placeOrder({
 			"transaction_type": txtTyp,
 			"exchange": pos.exchange,
