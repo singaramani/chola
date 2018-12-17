@@ -15,6 +15,7 @@
 	var trigger_offset = 0.10;
 	var price_offset = 0.05;
 	var balperscrip = 0;
+	var restrictNewOrders = false;
 	
 	function initSetToken() {
 		fs.readFile("/data/token.txt", "utf8", function (err, data) {
@@ -225,21 +226,22 @@
 			Worker.logme("Socket connected.");
 			upstox.on("orderUpdate", function (message) {
 				if (message.status == "open") {
-					Worker.logme(message.order_id + " - Open : " + message.symbol + " " + message.quantity + " @ " + message.price);
+					Worker.logme(message.order_id + " - Open : " + message.transaction_type + " " + message.symbol + " " + message.quantity + " @ " + message.price);
 				}				
 				if (message.status == "trigger pending") {
-					Worker.logme(message.order_id + " - Trgr. pending : " + message.symbol + " " + message.quantity + " @ " + message.trigger_price);
+					Worker.logme(message.order_id + " - Trgr. pending : " + message.transaction_type + " " + message.symbol + " " + message.quantity + " @ " + message.trigger_price);
 				}
 				if (message.status == "complete") {
 					Worker.logme(" ");
-					Worker.logme(message.order_id + " - Completed : " + message.symbol + " " + message.traded_quantity + " @ " + message.average_price);
-					placeTargerOrder(message);
+					Worker.logme(message.order_id + " - Completed : " + message.transaction_type + " " + message.symbol + " " + message.traded_quantity + " @ " + message.average_price);
+					if(!restrictNewOrders)
+					   placeTargerOrder(message);
 				}
 				if (message.status == "cancelled") {
-					Worker.logme(message.order_id + " - Cancelled : " + message.symbol + " " + message.traded_quantity + " @ " + message.average_price);
+					Worker.logme(message.order_id + " - Cancelled : " + message.transaction_type + " " + message.symbol + " " + message.quantity + " @ " + message.price);
 				}
 				if (message.status == "rejected") {
-					Worker.logme(message.order_id + " - Rejected : " + message.symbol + " " + message.traded_quantity + " @ " + message.average_price);
+					Worker.logme(message.order_id + " - Rejected : " + message.transaction_type + " " + message.symbol + " " + message.quantity + " @ " + message.price);
 				}				
 			});
 			upstox.on("positionUpdate", function (message) {
@@ -302,9 +304,10 @@
 	function cancellAllOrders() {
 		upstox.cancelAllOrder({})
 		.then(function (response) {
+			Worker.logme(" ");
 			Worker.logme(response.message);
-			if(response.data)
-				Worker.logme("Orders:" + response.data);
+			//if(response.data)
+			//	Worker.logme("Orders:" + response.data);
 		}).catch(function (error) {
 			//done(error);
 			Worker.logme("Error cancelling all orders at once. "+JSON.stringify(error));
@@ -341,6 +344,7 @@
 	}
 
 	function exitAllPos() {
+		restrictNewOrders = true;
 		upstox.getPositions()
 		.then(function (response) {
 			var tPos = response.data;
