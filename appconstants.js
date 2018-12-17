@@ -14,7 +14,8 @@
 		socket_schedule:process.env.SOCKDISCONJOB,
 		stockpicks:process.env.SPICK,
 		targetpcent:process.env.TRGTPCENT,
-		nscrips:process.env.NOOFSCRIPS
+		nscrips:process.env.NOOFSCRIPS,
+		
 	};
 	
 	var n50 = [
