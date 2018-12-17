@@ -18,7 +18,7 @@
 	var restrictNewOrders = false;
 	
 	function initSetToken() {
-		fs.readFile("/data/token.txt", "utf8", function (err, data) {
+		fs.readFile(appconst.tokenfile, "utf8", function (err, data) {
 			//fs.readFile("D:\\token.txt", "utf8", function(err, data){
 			if (err) {
 				return "file read error";
