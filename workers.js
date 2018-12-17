@@ -1,5 +1,7 @@
 (function() {
 	const fs = require('fs');
+	const Appconst = require("./appconstants");
+	var appconst = Appconst.getAppConstants();
 	module.exports.fetchWriteToken = function(url) {
 		const httpc = require('http'), 
 		httpsc     = require('https');
@@ -10,7 +12,7 @@
 		client.get(url, (resp) => {
 			resp.on('data', (chunk) => { data += chunk; });
 			resp.on('end', () => {
-				fs.writeFile("/data/token.txt", data.trim(), function(err) {
+				fs.writeFile(appconst.tokenfile, data.trim(), function(err) {
 				//fs.writeFile("D:\\token.txt", data.trim(), function(err) {
 					if(err) {return console.log("Token->Store.. Err::"+err);}
 					logme("Token->Store.. Done");
@@ -38,7 +40,7 @@
 		});
     }
 	function readToken() {
-		fs.readFile("/data/token.txt", "utf8", function(err, data){
+		fs.readFile(appconst.tokenfile, "utf8", function(err, data){
 		//fs.readFile("D:\\token.txt", "utf8", function(err, data){
 			if(err) { return "file read error"; logme("file read error"); }
 			return data;
