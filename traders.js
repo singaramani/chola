@@ -225,12 +225,13 @@
 			Worker.logme("Socket connected.");
 			upstox.on("orderUpdate", function (message) {
 				if (message.status == "open") {
-					Worker.logme(message.order_id + " - Open : " + message.symbol + " " + message.quantity + " @ " + message.trigger_price);
+					Worker.logme(message.order_id + " - Open : " + message.symbol + " " + message.quantity + " @ " + message.price);
 				}				
 				if (message.status == "trigger pending") {
 					Worker.logme(message.order_id + " - Trgr. pending : " + message.symbol + " " + message.quantity + " @ " + message.trigger_price);
 				}
 				if (message.status == "complete") {
+					Worker.logme(" ");
 					Worker.logme(message.order_id + " - Completed : " + message.symbol + " " + message.traded_quantity + " @ " + message.average_price);
 					placeTargerOrder(message);
 				}
@@ -325,13 +326,13 @@
 				if (pos.unrealized_profit && !isNaN(pos.unrealized_profit)) {
 					pnl = pnl + Number(pos.unrealized_profit);
 				}
-				Worker.logme(pos.symbol + " | " + pos.net_quantity + " | " + pnl);
+				Worker.logme(pos.symbol.padEnd(15) + " | " + (pos.net_quantity).toString().padStart(4) + " | " + pnl.toFixed(2).padStart(8));
 				mtm = mtm + pnl;
 			});
 			if(!isOpenPos)
-				Worker.logme("No open positions available.");
+				Worker.logme("No open positions available");
 			Worker.logme("--------------------------------------------");
-			Worker.logme("MTM: " + mtm);
+			Worker.logme("MTM: " + mtm.toFixed(2).padStart(28));
 			Worker.logme("--------------------------------------------");
 		}).catch(function (error) {
 			//done(error);
@@ -377,7 +378,7 @@
 	function diconnectSock() {
 		upstox.closeSocket();
 		Worker.logme("Done.");
-		Worker.logme("---------------------------------------------------------------");
+		console.log("---------------------------------------------------------------");
 	}
 
 	initSetToken();
