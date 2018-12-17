@@ -373,6 +373,7 @@
 			});
 			if(!isOpenPosAvailable)
 				Worker.logme("No open positions available");
+			Worker.logme(" ");
 		}).catch(function (error) {
 			//done(error);
 			Worker.logme("Error getting positions for exiting. "+JSON.stringify(error));
@@ -380,6 +381,7 @@
 	}
 
 	function diconnectSock() {
+		restrictNewOrders = false;
 		upstox.closeSocket();
 		Worker.logme("Done.");
 		console.log("---------------------------------------------------------------");
@@ -392,6 +394,7 @@
 	module.exports.exitAllPos = exitAllPos;
 	module.exports.diconnectSock = diconnectSock;
 	module.exports.strategyORB = function () {
+		restrictNewOrders = false;
 		if(appconst.stockpicks == "N50") selectScrips_HL(n50, appconst.nscrips, appconst.stockpicks);
 		if(appconst.stockpicks == "NFO") selectScrips_HL(nfo, appconst.nscrips, appconst.stockpicks);
 	}	
