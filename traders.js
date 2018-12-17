@@ -304,7 +304,6 @@
 	function cancellAllOrders() {
 		upstox.cancelAllOrder({})
 		.then(function (response) {
-			Worker.logme(" ");
 			Worker.logme(response.message);
 			//if(response.data)
 			//	Worker.logme("Orders:" + response.data);
