@@ -122,12 +122,14 @@ function positionJOB() {
 function cancelAllOrdersJOB() {
 	Worker.logme(" ");
 	Worker.logme("Cancelling all open orders..");
+	Worker.logme(" ");
 	Trader.cancellAllOrders();
 }
 
 function exitPosJOB() {
 	Worker.logme(" ");
 	Worker.logme("Exiting all open positions..");
+	Worker.logme(" ");
 	Trader.exitAllPos();
 }
 
