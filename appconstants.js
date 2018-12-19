@@ -16,7 +16,8 @@
 		stockpicks:process.env.SPICK,
 		targetpcent:process.env.TRGTPCENT,
 		nscrips:process.env.NOOFSCRIPS,
-		tokenfile:process.env.TOKENFILE
+		tokenfile:process.env.TOKENFILE,
+		mexposure:process.env.MEXPOSURE
 	};
 	
 	var n50 = [
