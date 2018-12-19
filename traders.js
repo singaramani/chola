@@ -221,7 +221,7 @@
 		Worker.logme("--------------------------------------------------");
 		var orderPrepArray = [];
 		scripArr.forEach(function (scrip) {
-			//qty = Math.floor(balperscrip/Number(scrip.high)); --BALQTY TODO POINTER--
+			//qty = Math.floor(balperscrip/Number(scrip.high));
 			Worker.logme(scrip.sym + "|buy above " + scrip.high + "|sell below " + scrip.low + "|qty:" + qty);
 			orderPrepArray.push({
 				txnDesc: "Sell",
