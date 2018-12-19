@@ -14,7 +14,7 @@
 	var qty = process.env.TQTY || 3;
 	var trigger_offset = 0.10;
 	var price_offset = 0.05;
-	var balperscrip = 0;
+	var balperscrip = 40000;
 	var restrictNewOrders = false;
 	
 	function initSetToken() {
@@ -221,8 +221,8 @@
 		Worker.logme("--------------------------------------------------");
 		var orderPrepArray = [];
 		scripArr.forEach(function (scrip) {
-			//qty = Math.floor(balperscrip/Number(scrip.high));
-			Worker.logme(scrip.sym + "|buy above " + scrip.high + "|sell below " + scrip.low + "|qty:" + qty);
+			qty = Math.floor(balperscrip/Number(scrip.high));
+			Worker.logme(scrip.sym.padEnd(15) + "|buy above " + scrip.high + "|sell below " + scrip.low + "|qty:" + qty);
 			orderPrepArray.push({
 				txnDesc: "Sell",
 				txnType: "s",
