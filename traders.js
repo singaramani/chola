@@ -222,6 +222,9 @@
 		var orderPrepArray = [];
 		scripArr.forEach(function (scrip) {
 			qty = Math.floor(balperscrip/Number(scrip.high));
+                        Worker.logme("Test bal per scrip: "+balperscrip);
+                        Worker.logme("Test qty:"+qty); 
+                        Worker.logme("T Qty:"+Math.floor(balperscrip/Number(960)));
 			Worker.logme(scrip.sym.padEnd(15) + "|buy above " + scrip.high + "|sell below " + scrip.low + "|qty:" + qty);
 			orderPrepArray.push({
 				txnDesc: "Sell",
