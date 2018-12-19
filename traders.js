@@ -11,7 +11,7 @@
 	var n50 = Appconst.getN50();
 	var nfo = Appconst.getAllNFO();
 
-	var qty = process.env.TQTY;
+	var qty = process.env.TQTY || 3;
 	var trigger_offset = 0.10;
 	var price_offset = 0.05;
 	var balperscrip = 0;
@@ -57,7 +57,7 @@
         	});
 	}*/
 	
-	function selectScrips_HL(sList, n, sType) {
+	/*function selectScrips_HL(sList, n, sType) {
 		Worker.logme("Getting " + sType + " scrips pclose & open");
 		var _promiseArray = [];
 		sList.forEach(function (scrip) {
@@ -101,7 +101,68 @@
 			Worker.logme("Selected scrips : [" + sList + "]");
 			getHighLow(selectedScrips, 15);
 		});
+	}*/
+
+	var _promiseArrayAll = [];
+	var _selectedScrips = [];
+
+	function selectScrips_HL(sList, n, i) {
+		_selectedScrips.length = 0;
+		setTimeout(function(){
+			//Worker.logme("invoking getLiveFeed for "+sList[i].sym);
+			Worker.logme("getting "+sList[i].sym +" data..");
+			upstox.getLiveFeed({
+				"exchange": sList[i].ex,
+				"symbol": sList[i].sym,
+				"type": "full"
+			})
+			.then(function (response) {
+				var pdiff = (((response.data.open - response.data.close) / response.data.close) * 100).toFixed(2);
+				_promiseArrayAll.push({
+					ex: sList[i].ex,
+					sym: sList[i].sym,
+					//pclose:response.data.close,
+					//topen:response.data.ltp,
+					diff: Number(pdiff)
+				});
+				++i;
+				if(i<sList.length){
+					selectScrips_HL(sList, n, i);
+				}else{
+					Worker.logme(i);
+					findNEdge(_promiseArrayAll,n);
+				}
+			})
+			.catch(function (error) {
+				Worker.logme("Err::" + sList[i].sym + "::" + error.message);
+				++i;
+				if(i<sList.length){
+					selectScrips_HL(sList, n, i);
+				}else{
+					Worker.logme(i);
+					findNEdge(_promiseArrayAll,n);
+				}				
+			});
+		},1100);
 	}
+
+	function findNEdge(respArr,n){
+			Worker.logme("Sorting..");
+			respArr = respArr.sortBy('diff');
+			Worker.logme("Identifying top and bottom " + n + " scrips..");
+			_selectedScrips = [];
+			_selectedScrips.push.apply(_selectedScrips, respArr.slice(0, n));
+			_selectedScrips.push.apply(_selectedScrips, respArr.slice(-n));
+			//Worker.logme("all:"+JSON.stringify(selectedScrips));
+			var sList = "";
+			_selectedScrips.forEach(function (scrip) {
+				sList += scrip.sym + ","
+			});
+			Worker.logme("Selected scrips : [" + sList + "]");
+			_promiseArrayAll.length = 0;
+      //getHighLow(selectedScrips,15);
+	}
+
 	function getHighLow(sList, tf) {
 		Worker.logme("Identifying first " + tf + "min HL");
 		var _promiseArray = [];
@@ -380,6 +441,7 @@
 	}
 
 	function diconnectSock() {
+		_promiseArrayAll.length = 0;
 		restrictNewOrders = false;
 		upstox.closeSocket();
 		Worker.logme("Done.");
@@ -392,9 +454,18 @@
 	module.exports.cancellAllOrders = cancellAllOrders;
 	module.exports.exitAllPos = exitAllPos;
 	module.exports.diconnectSock = diconnectSock;
-	module.exports.strategyORB = function () {
+	module.exports.pickStocks = function () {
 		restrictNewOrders = false;
-		if(appconst.stockpicks == "N50") selectScrips_HL(n50, appconst.nscrips, appconst.stockpicks);
-		if(appconst.stockpicks == "NFO") selectScrips_HL(nfo, appconst.nscrips, appconst.stockpicks);
-	}	
+		if(appconst.stockpicks == "N50") {
+			Worker.logme("Getting " + appconst.stockpicks + " scrips pclose & open");
+			selectScrips_HL(n50, appconst.nscrips, 0);
+		}
+		if(appconst.stockpicks == "NFO") {
+			Worker.logme("Getting " + appconst.stockpicks + " scrips pclose & open");
+			selectScrips_HL(nfo, appconst.nscrips,0);
+		}
+	};
+	module.exports.strategyORB = function(){
+		getHighLow(_selectedScrips, 15);
+	};	
 }());

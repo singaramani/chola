@@ -31,6 +31,10 @@ try {
 			wakeupJOB();
 			response.writeHead(200, {'Content-Type': 'application/json'});
 			response.end(JSON.stringify({"command": "done"}));
+		} else if (urlpath == '/' + appconst.secCode+'pickStockJob') {
+			pickStockJOB();
+			response.writeHead(200, {'Content-Type': 'application/json'});
+			response.end(JSON.stringify({"command": "done"}));
 		} else if (urlpath == '/' + appconst.secCode+'tokenJob') {
 			tokenJOB();
 			response.writeHead(200, {'Content-Type': 'application/json'});
@@ -103,13 +107,23 @@ function tokenJOB() {
 	getLoginToken();
 }
 
+function pickStockJOB() {
+	console.log("\n\n---------------------------------------------------------------");
+	Worker.logme("Today " + new Date().toLocaleString("en-US", {
+			timeZone: "Asia/Kolkata"
+		}) + " IST");
+	Worker.logme("pickStockJOB Started");
+	Trader.initSetToken();
+	Trader.pickStocks();
+}
+
 function tradeJOB() {
 	console.log("\n\n---------------------------------------------------------------");
 	Worker.logme("Today " + new Date().toLocaleString("en-US", {
 			timeZone: "Asia/Kolkata"
 		}) + " IST");
 	Worker.logme("tradeJOB Started");
-	Trader.initSetToken();
+	//Trader.initSetToken();
 	Trader.strategyORB();
 }
 
@@ -152,6 +166,13 @@ function scheduleTokenJOB() {
 	});
 }
 
+function schedulePickStocksJOB() {
+	console.log("Scheduling pickStockJOB.. ");
+	scheduler.scheduleJob(appconst.pickStock_schedule, function (fireDate) {
+		pickStockJOB();
+	});
+}
+
 function scheduleTradeJOB() {
 	console.log("Scheduling tradeJOB.. ");
 	scheduler.scheduleJob(appconst.trade_schedule, function (fireDate) {
@@ -190,9 +211,11 @@ function scheduleDisconnectSockJOB() {
 function rescheduleAllJobs() {
 	scheduleTokenServerWakeup();
 	scheduleTokenJOB();
+	schedulePickStocksJOB();
 	scheduleTradeJOB();
 	schedulePositionJOB();
 	scheduleCancelAppOpenJOB();
 	scheduleExitPosJOB();
 	scheduleDisconnectSockJOB();
-}rescheduleAllJobs();
+}
+rescheduleAllJobs();

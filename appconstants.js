@@ -5,9 +5,10 @@
 		atCodeURL:process.env.ATCODEURL,
 		secCode:process.env.WSECCODE,
 		wakeupURL:process.env.WAKEURL,
-		token_schedule:process.env.TOKENJOB,
-		trade_schedule:process.env.TRADEJOB,
 		wakeup_schedule:process.env.WAKEJOB,
+		token_schedule:process.env.TOKENJOB,
+		pickStock_schedule:process.env.SPICKJOB,
+		trade_schedule:process.env.TRADEJOB,		
 		getpos_schedule:process.env.GETPOSJOB,
 		cancelall_schedule:process.env.CANCELALLJOB,
 		exitpos_schedule:process.env.EXITPOSJOB,
@@ -15,7 +16,7 @@
 		stockpicks:process.env.SPICK,
 		targetpcent:process.env.TRGTPCENT,
 		nscrips:process.env.NOOFSCRIPS,
-	        tokenfile:process.env.TOKENFILE	
+		tokenfile:process.env.TOKENFILE
 	};
 	
 	var n50 = [
