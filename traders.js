@@ -218,13 +218,10 @@
 		//var qty = 0;
 		Worker.logme(" ");
 		Worker.logme("Order plan:");
-		Worker.logme("--------------------------------------------------");
+		Worker.logme("----------------------------------------------------------------------");
 		var orderPrepArray = [];
 		scripArr.forEach(function (scrip) {
 			qty = Math.floor(balperscrip/Number(scrip.high));
-                        //Worker.logme("Test bal per scrip: "+balperscrip);
-                        //Worker.logme("Test qty:"+qty); 
-                        //Worker.logme("T Qty:"+Math.floor(balperscrip/Number(960)));
 			Worker.logme(scrip.sym.padEnd(15) + "|buy above " + scrip.high.toString().padStart(7) + "|sell below " + scrip.low.toString().padStart(7) + "|qty:" + qty.toString().padStart(4));
 			orderPrepArray.push({
 				txnDesc: "Sell",
@@ -245,7 +242,7 @@
 				q: qty
 			});
 		});
-		Worker.logme("--------------------------------------------------");
+		Worker.logme("----------------------------------------------------------------------");
 		placeOrdr(orderPrepArray);
 	}
 
@@ -293,10 +290,10 @@
 					Worker.logme(message.order_id + " - Open : " + message.transaction_type + " " + message.symbol + " " + message.quantity + " @ " + message.price);
 				}				
 				if (message.status == "trigger pending") {
+					Worker.logme(" ");
 					Worker.logme(message.order_id + " - Trgr. pending : " + message.transaction_type + " " + message.symbol + " " + message.quantity + " @ " + message.trigger_price);
 				}
 				if (message.status == "complete") {
-					Worker.logme(" ");
 					Worker.logme(message.order_id + " - Completed : " + message.transaction_type + " " + message.symbol + " " + message.traded_quantity + " @ " + message.average_price);
 					if(!restrictNewOrders)
 					   placeTargerOrder(message);
