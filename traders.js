@@ -287,10 +287,10 @@
 			Worker.logme("Socket connected.");
 			upstox.on("orderUpdate", function (message) {
 				if (message.status == "open") {
+					Worker.logme(" ");
 					Worker.logme(message.order_id + " - Open : " + message.transaction_type + " " + message.symbol + " " + message.quantity + " @ " + message.price);
 				}				
 				if (message.status == "trigger pending") {
-					Worker.logme(" ");
 					Worker.logme(message.order_id + " - Trgr. pending : " + message.transaction_type + " " + message.symbol + " " + message.quantity + " @ " + message.trigger_price);
 				}
 				if (message.status == "complete") {
