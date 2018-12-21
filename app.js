@@ -59,7 +59,7 @@ try {
 			disconSockJOB();
 			response.writeHead(200, {'Content-Type': 'application/json'});
 			response.end(JSON.stringify({"command": "done"}));
-		} else{
+		} else if (urlpath == '/' + appconst.secCode+'connSock') {
 			Trader.initSetToken();
 			response.writeHead(200, {'Content-Type': 'application/json'});
 			response.end(JSON.stringify({"command": "done"}));			
