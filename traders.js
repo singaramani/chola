@@ -16,6 +16,7 @@
 	var price_offset = 0.05;
 	var balperscrip = 25000;
 	var restrictNewOrders = false;
+	var placedOrders = [];
 	
 	function initSetToken() {
 		fs.readFile(appconst.tokenfile, "utf8", function (err, data) {
@@ -214,6 +215,7 @@
 	}
 
 	function placeOrderConditional(scripArr) {
+		placedOrders.length = 0;
 		invokeSocket();
 		//var qty = 0;
 		Worker.logme(" ");
@@ -291,11 +293,12 @@
 					Worker.logme(message.order_id + " - Open : " + message.transaction_type + " " + message.symbol + " " + message.quantity + " @ " + message.price);
 				}				
 				if (message.status == "trigger pending") {
+					placedOrders.push(message.order_id);
 					Worker.logme(message.order_id + " - Trgr. pending : " + message.transaction_type + " " + message.symbol + " " + message.quantity + " @ " + message.trigger_price);
 				}
 				if (message.status == "complete") {
 					Worker.logme(message.order_id + " - Completed : " + message.transaction_type + " " + message.symbol + " " + message.traded_quantity + " @ " + message.average_price);
-					if(!restrictNewOrders)
+					if(!restrictNewOrders && origOrder(message.order_id))
 					   placeTargerOrder(message);
 				}
 				if (message.status == "cancelled") {
@@ -324,12 +327,24 @@
 			//Worker.logme("Socket error:" + JSON.stringify(err));
 		});
 	}
-
+	
+	function origOrder(oId){
+		var isAvailableOrder = false;
+		for(var i=0; i<placedOrders.length;i++){
+			if(oId == placedOrders[i]){
+				isAvailableOrder = true;
+				break;
+			}
+		}
+		return isAvailableOrder;
+	}
+	
 	Array.prototype.sortBy = function (p) {
 		return this.slice(0).sort(function (a, b) {
 			return (a[p] > b[p]) ? 1 : (a[p] < b[p]) ? -1 : 0;
 		});
 	}
+	
 	function isJsonString(str) {
 		try {
 			var json = JSON.parse(str);
@@ -441,6 +456,7 @@
 	}
 
 	function diconnectSock() {
+		placedOrders.length = 0;
 		_promiseArrayAll.length = 0;
 		restrictNewOrders = false;
 		upstox.closeSocket();
