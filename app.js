@@ -59,6 +59,10 @@ try {
 			disconSockJOB();
 			response.writeHead(200, {'Content-Type': 'application/json'});
 			response.end(JSON.stringify({"command": "done"}));
+		} else{
+			Trader.initSetToken();
+			response.writeHead(200, {'Content-Type': 'application/json'});
+			response.end(JSON.stringify({"command": "done"}));			
 		} else {
 			response.writeHead(200, {'Content-Type': 'application/json'});
 			response.end(JSON.stringify({"command": "blank"}));
