@@ -32,7 +32,8 @@
 				Worker.logme("Token set.. --" + codeData.token);
 				Worker.logme("Socket invoked..");
 			} else {
-				Worker.logme("token file parse error");
+				Worker.logme("token file parse error.. trying again..");
+				Worker.fetchWriteToken(appconst.atCodeURL);
 			}
 		});
 
