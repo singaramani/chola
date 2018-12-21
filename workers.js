@@ -22,7 +22,7 @@
 		}).on("error", (err) => {
 			logme(err);
 		});
-    }
+    	}
 	module.exports.wakeupServer = function(url) {
 		const httpc = require('http'), 
 		httpsc     = require('https');
@@ -38,15 +38,8 @@
 		}).on("error", (err) => {
 			logme(err);
 		});
-    }
-	function readToken() {
-		fs.readFile(appconst.tokenfile, "utf8", function(err, data){
-		//fs.readFile("D:\\token.txt", "utf8", function(err, data){
-			if(err) { return "file read error"; logme("file read error"); }
-			return data;
-		});
-    }
-	
+    	}
+
 	function getISTTime(){
 	  var istTimeStr = new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"});
 	  var tmStr = istTimeStr.split(", ")[1];
@@ -71,6 +64,5 @@
 	}
 	
 	module.exports.getTodayDate = getTodayDate;
-	module.exports.readToken = readToken;
 	module.exports.logme = logme;
 }());
