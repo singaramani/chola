@@ -31,8 +31,10 @@
 				invokeSocket();
 				Worker.logme("Token set.. --" + codeData.token);
 				Worker.logme("Socket invoked..");
+				Worker.notifyMe("starting Socket..");
 			} else {
 				Worker.logme("token file parse error.. trying again..");
+				Worker.notifyMe("error parsing token file..trying again..");
 				Worker.fetchWriteToken(appconst.atCodeURL);
 			}
 		});
@@ -136,6 +138,7 @@
 				}
 			})
 			.catch(function (error) {
+				Worker.notifyMe("Err::" + sList[i].sym + "::" + error.message);
 				Worker.logme("Err::" + sList[i].sym + "::" + error.message);
 				++i;
 				if(i<sList.length){
@@ -149,20 +152,23 @@
 	}
 
 	function findNEdge(respArr,n){
-			Worker.logme("Sorting..");
-			respArr = respArr.sortBy('diff');
-			Worker.logme("Identifying top and bottom " + n + " scrips..");
-			_selectedScrips = [];
-			_selectedScrips.push.apply(_selectedScrips, respArr.slice(0, n));
-			_selectedScrips.push.apply(_selectedScrips, respArr.slice(-n));
-			//Worker.logme("all:"+JSON.stringify(selectedScrips));
-			var sList = "";
-			_selectedScrips.forEach(function (scrip) {
-				sList += scrip.sym + ","
-			});
-			Worker.logme("Selected scrips : [" + sList + "]");
-			_promiseArrayAll.length = 0;
-      //getHighLow(selectedScrips,15);
+		Worker.logme("Sorting..");
+		Worker.notifyMe("Sorting..");
+		respArr = respArr.sortBy('diff');
+		Worker.logme("Identifying top and bottom " + n + " scrips..");
+		Worker.notifyMe("Identifying top and bottom " + n + " scrips..");
+		_selectedScrips = [];
+		_selectedScrips.push.apply(_selectedScrips, respArr.slice(0, n));
+		_selectedScrips.push.apply(_selectedScrips, respArr.slice(-n));
+		//Worker.logme("all:"+JSON.stringify(selectedScrips));
+		var sList = "";
+		_selectedScrips.forEach(function (scrip) {
+			sList += scrip.sym + ","
+		});
+		Worker.logme("Selected scrips : [" + sList + "]");
+		Worker.notifyMe("Selected scrips : [" + sList + "]");
+		_promiseArrayAll.length = 0;
+		//getHighLow(selectedScrips,15);
 	}
 
 	function getHighLow(sList, tf) {
@@ -221,11 +227,13 @@
 		//var qty = 0;
 		Worker.logme(" ");
 		Worker.logme("Order plan:");
+		Worker.notifyMe("Order plan:");
 		Worker.logme("----------------------------------------------------------------------");
 		var orderPrepArray = [];
 		scripArr.forEach(function (scrip) {
 			qty = Math.floor(balperscrip/Number(scrip.high));
 			Worker.logme(scrip.sym.padEnd(15) + "|buy above " + scrip.high.toString().padStart(7) + "|sell below " + scrip.low.toString().padStart(7) + "|qty:" + qty.toString().padStart(4));
+			Worker.notifyMe(scrip.sym + "|buy abv. " + scrip.high.toString() + "|sell bel. " + scrip.low.toString() + "|qty:" + qty.toString());
 			orderPrepArray.push({
 				txnDesc: "Sell",
 				txnType: "s",
@@ -252,6 +260,7 @@
 	function placeOrdr(orderPrepArray) {
 		Worker.logme(" ");
 		Worker.logme("Placing orders..");
+		Worker.notifyMe("Placing orders..");
 		orderPrepArray.forEach(function (ordr) {
 			// Worker.logme(JSON.stringify({
 			//   "transaction_type":ordr.txnType,
@@ -288,6 +297,7 @@
 		upstox.connectSocket()
 		.then(function () {
 			Worker.logme("Socket connected.");
+			Worker.notifyMe("Socket connected.");
 			upstox.on("orderUpdate", function (message) {
 				if (message.status == "open") {
 					Worker.logme(" ");
@@ -295,9 +305,11 @@
 				}				
 				if (message.status == "trigger pending") {
 					placedOrders.push(message.order_id);
+					Worker.notifyMe("Tgr. Pend|"+ message.transaction_type + "|" + message.symbol + "|" + message.quantity + "@" + message.trigger_price);
 					Worker.logme(message.order_id + " - Trgr. pending : " + message.transaction_type + " " + message.symbol + " " + message.quantity + " @ " + message.trigger_price);
 				}
 				if (message.status == "complete") {
+					Worker.notifyMe("Completed|"+ message.transaction_type + "|" + message.symbol + "|" + message.traded_quantity + "@" + message.average_price);
 					Worker.logme(message.order_id + " - Completed : " + message.transaction_type + " " + message.symbol + " " + message.traded_quantity + " @ " + message.average_price);
 					if(!restrictNewOrders && origOrder(message.order_id))
 					   placeTargerOrder(message);
@@ -320,6 +332,7 @@
 			});
 			upstox.on("disconnected", function (message) {
 				Worker.logme("Socket disconnected.");
+				Worker.notifyMe("Socket disconnected.");
 			});
 			upstox.on("error", function (error) {
 				Worker.logme("Socket on_error:" + JSON.stringify(error));
@@ -360,6 +373,7 @@
 		var calc_tp = (txtTyp == "b") ? 1-(appconst.targetpcent/100)-0.01 : 1+(appconst.targetpcent/100);
 		var tp = (Math.round((pos.average_price) * calc_tp * 20) / 20);
 		Worker.logme("Placing target order for " + txtTyp.toUpperCase() + " " + pos.symbol + " " + pos.traded_quantity + " @ " + tp + " ["+appconst.targetpcent+"%]");
+		Worker.notifyMe("Placing tgt|" + txtTyp.toUpperCase() + "|" + pos.symbol + "|" + pos.traded_quantity + "@" + tp + " ["+appconst.targetpcent+"%]");
 		upstox.placeOrder({
 			"transaction_type": txtTyp,
 			"exchange": pos.exchange,
@@ -375,6 +389,7 @@
 		.catch(function (error) {
 			//done(error);
 			Worker.logme("Placing target order error. "+JSON.stringify(error));
+			Worker.notifyMe("Placing tgt order err.."
 		});
 	}
 
@@ -382,11 +397,13 @@
 		upstox.cancelAllOrder({})
 		.then(function (response) {
 			Worker.logme(response.message);
+			Worker.notifyMe(response.message);
 			//if(response.data)
 			//	Worker.logme("Orders:" + response.data);
 		}).catch(function (error) {
 			//done(error);
 			Worker.logme("Error cancelling all orders at once. "+JSON.stringify(error));
+			Worker.notifyMe("Error cancelling all orders at once.");
 		});
 	}
 
@@ -408,14 +425,17 @@
 				Worker.logme(pos.symbol.padEnd(15) + " | " + (pos.net_quantity).toString().padStart(4) + " | " + pnl.toFixed(2).padStart(8));
 				mtm = mtm + pnl;
 			});
-			if(!isOpenPos)
+			if(!isOpenPos){
 				Worker.logme("No open positions available");
+			}
 			Worker.logme("--------------------------------------------");
 			Worker.logme("MTM: " + mtm.toFixed(2).padStart(28));
 			Worker.logme("--------------------------------------------");
+			Worker.notifyMe("MTM: " + mtm.toFixed(2));
 		}).catch(function (error) {
 			//done(error);
 			Worker.logme("Error getting positions. "+JSON.stringify(error));
+			Worker.notifyMe("Error getting positions.. ");
 		});
 	}
 
@@ -444,11 +464,14 @@
 					.catch(function (error) {
 						//done(error);
 						Worker.logme("Placing exit order error. "+JSON.stringify(error));
+						Worker.notifyMe("Placing exit order error.. ");
 					});
 				}
 			});
-			if(!isOpenPosAvailable)
+			if(!isOpenPosAvailable){
 				Worker.logme("No open positions available");
+				Worker.notifyMe("No open positions available");
+			}
 			Worker.logme(" ");
 		}).catch(function (error) {
 			//done(error);
@@ -462,6 +485,7 @@
 		restrictNewOrders = false;
 		upstox.closeSocket();
 		Worker.logme("Done.");
+		Worker.notifyMe("Disconnected..");
 		console.log("---------------------------------------------------------------");
 	}
 
