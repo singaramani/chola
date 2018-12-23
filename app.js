@@ -16,6 +16,7 @@ var appconst = Appconst.getAppConstants();
 try {
 	http.createServer(function (request, response) {
 		var urlpath = request.url.split("?").shift();
+		Worker.notifyMe("web activity on "+urlpath);
 		if (urlpath == '/' + appconst.secCode+'tokenRead') {
 			fs.readFile(appconst.tokenfile, "utf8", function (err, data) {
 				//fs.readFile("D:\\token.txt", "utf8", function(err, data){
@@ -99,6 +100,7 @@ function wakeupJOB() {
 			timeZone: "Asia/Kolkata"
 		}) + " IST");
 	Worker.logme("wakeupJOB Started");
+	Worker.notifyMe("wakeupJob..");
 	Worker.wakeupServer(appconst.wakeupURL);
 }
 
@@ -108,6 +110,7 @@ function tokenJOB() {
 			timeZone: "Asia/Kolkata"
 		}) + " IST");
 	Worker.logme("tokenJOB Started");
+	Worker.notifyMe("tokenJob..");
 	getLoginToken();
 }
 
@@ -117,6 +120,7 @@ function pickStockJOB() {
 			timeZone: "Asia/Kolkata"
 		}) + " IST");
 	Worker.logme("pickStockJOB Started");
+	Worker.notifyMe("stockPickJob..");
 	Trader.initSetToken();
 	Trader.pickStocks();
 }
@@ -127,6 +131,7 @@ function tradeJOB() {
 			timeZone: "Asia/Kolkata"
 		}) + " IST");
 	Worker.logme("tradeJOB Started");
+	Worker.notifyMe("tradeJob..");
 	//Trader.initSetToken();
 	Trader.strategyORB();
 }
@@ -140,6 +145,7 @@ function positionJOB() {
 function cancelAllOrdersJOB() {
 	Worker.logme(" ");
 	Worker.logme("Cancelling all open orders..");
+	Worker.notifyMe("cancelAllOrdersJob..");
 	Worker.logme(" ");
 	Trader.cancellAllOrders();
 }
@@ -147,12 +153,14 @@ function cancelAllOrdersJOB() {
 function exitPosJOB() {
 	Worker.logme(" ");
 	Worker.logme("Exiting all open positions..");
+	Worker.notifyMe("exitOpenPosJob..");
 	Worker.logme(" ");
 	Trader.exitAllPos();
 }
 
 function disconSockJOB() {
 	Worker.logme("Disconnecting socket..");
+	Worker.notifyMe("socketDisconJob..");
 	Trader.diconnectSock();
 }
 
