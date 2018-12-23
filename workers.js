@@ -1,7 +1,14 @@
 (function() {
+	const telegram = require('telegram-bot-api');
 	const fs = require('fs');
 	const Appconst = require("./appconstants");
 	var appconst = Appconst.getAppConstants();
+	
+	var tbot = new telegram({
+		token: appconst.teleToken,
+		updates: {enabled: true}
+	});
+	
 	module.exports.fetchWriteToken = function(url) {
 		const httpc = require('http'), 
 		httpsc     = require('https');
@@ -63,6 +70,19 @@
 		return (dd + '-' + mm + '-' + yyyy);
 	}
 	
+	function notifyMe(message,options){
+		tbot.sendMessage({
+			chat_id:appconst.mychatid, 
+			text:message
+		}).then(function(data){
+			//console.log(data);
+		}).catch(function(err){
+			//console.log(err);
+		});
+	}
+	
+	module.exports.notifyMe = notifyMe;
 	module.exports.getTodayDate = getTodayDate;
 	module.exports.logme = logme;
+	
 }());
