@@ -17,7 +17,9 @@
 		targetpcent:process.env.TRGTPCENT,
 		nscrips:process.env.NOOFSCRIPS,
 		tokenfile:process.env.TOKENFILE,
-		mexposure:process.env.MEXPOSURE
+		mexposure:process.env.MEXPOSURE,
+		teleToken:'701987147:AAH-Ys9ncTM_wxwK_LeHDNz7XWj457Ok9s0',
+		mychatid:296751923
 	};
 	
 	var n50 = [
