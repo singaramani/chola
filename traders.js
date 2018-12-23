@@ -31,10 +31,10 @@
 				invokeSocket();
 				Worker.logme("Token set.. --" + codeData.token);
 				Worker.logme("Socket invoked..");
-				Worker.notifyMe("starting Socket..");
+				Worker.notifyMe("Starting Socket..");
 			} else {
 				Worker.logme("token file parse error.. trying again..");
-				Worker.notifyMe("error parsing token file..trying again..");
+				Worker.notifyMe("Error parsing token file..trying again..");
 				Worker.fetchWriteToken(appconst.atCodeURL);
 			}
 		});
@@ -156,7 +156,7 @@
 		Worker.notifyMe("Sorting..");
 		respArr = respArr.sortBy('diff');
 		Worker.logme("Identifying top and bottom " + n + " scrips..");
-		Worker.notifyMe("Identifying top and bottom " + n + " scrips..");
+		//Worker.notifyMe("Identifying top and bottom " + n + " scrips..");
 		_selectedScrips = [];
 		_selectedScrips.push.apply(_selectedScrips, respArr.slice(0, n));
 		_selectedScrips.push.apply(_selectedScrips, respArr.slice(-n));
@@ -305,19 +305,21 @@
 				}				
 				if (message.status == "trigger pending") {
 					placedOrders.push(message.order_id);
-					Worker.notifyMe("Tgr. Pend|"+ message.transaction_type + "|" + message.symbol + "|" + message.quantity + "@" + message.trigger_price);
+					Worker.notifyMe("Tgr. Pend|"+ message.transaction_type + "|" + message.symbol);
 					Worker.logme(message.order_id + " - Trgr. pending : " + message.transaction_type + " " + message.symbol + " " + message.quantity + " @ " + message.trigger_price);
 				}
 				if (message.status == "complete") {
-					Worker.notifyMe("Completed|"+ message.transaction_type + "|" + message.symbol + "|" + message.traded_quantity + "@" + message.average_price);
+					Worker.notifyMe("Completed|"+ message.transaction_type + "|" + message.symbol);
 					Worker.logme(message.order_id + " - Completed : " + message.transaction_type + " " + message.symbol + " " + message.traded_quantity + " @ " + message.average_price);
 					if(!restrictNewOrders && origOrder(message.order_id))
 					   placeTargerOrder(message);
 				}
 				if (message.status == "cancelled") {
+					Worker.notifyMe("Cancelled|"+ message.transaction_type + "|" + message.symbol);
 					Worker.logme(message.order_id + " - Cancelled : " + message.transaction_type + " " + message.symbol + " " + message.quantity + " @ " + message.price);
 				}
 				if (message.status == "rejected") {
+					Worker.notifyMe("Rejected|"+ message.transaction_type + "|" + message.symbol);
 					Worker.logme(message.order_id + " - Rejected : " + message.transaction_type + " " + message.symbol + " " + message.quantity + " @ " + message.price);
 				}				
 			});
@@ -499,10 +501,12 @@
 		restrictNewOrders = false;
 		if(appconst.stockpicks == "N50") {
 			Worker.logme("Getting " + appconst.stockpicks + " scrips pclose & open");
+			Worker.notifyMe("Getting " + appconst.stockpicks + " scrips data");
 			selectScrips_HL(n50, appconst.nscrips, 0);
 		}
 		if(appconst.stockpicks == "NFO") {
 			Worker.logme("Getting " + appconst.stockpicks + " scrips pclose & open");
+			Worker.notifyMe("Getting " + appconst.stockpicks + " scrips data");
 			selectScrips_HL(nfo, appconst.nscrips,0);
 		}
 	};
