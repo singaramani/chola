@@ -389,7 +389,7 @@
 		.catch(function (error) {
 			//done(error);
 			Worker.logme("Placing target order error. "+JSON.stringify(error));
-			Worker.notifyMe("Placing tgt order err.."
+			Worker.notifyMe("Placing tgt order err..");
 		});
 	}
 
