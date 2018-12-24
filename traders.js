@@ -158,7 +158,7 @@
         Worker.logme("Identifying top and bottom " + n + " scrips..");
         //Worker.notifyMe("Identifying top and bottom " + n + " scrips..");
         _selectedScrips = [];
-        _selectedScrips.push.apply(_selectedScrips, respArr.slice(0, n));
+        //_selectedScrips.push.apply(_selectedScrips, respArr.slice(0, n));
         _selectedScrips.push.apply(_selectedScrips, respArr.slice(-n));
         //Worker.logme("all:"+JSON.stringify(selectedScrips));
         var sList = "",
