@@ -162,9 +162,8 @@
 		_selectedScrips.push.apply(_selectedScrips, respArr.slice(-n));
 		//Worker.logme("all:"+JSON.stringify(selectedScrips));
 		var sList = "";
-		_selectedScrips.forEach(function (scrip) {
-			sList += scrip.sym + ","
-		});
+;
+		
 		Worker.logme("Selected scrips : [" + sList + "]");
 		Worker.notifyMe("Selected scrips : [" + sList + "]");
 		_promiseArrayAll.length = 0;
@@ -309,7 +308,7 @@
 					Worker.logme(message.order_id + " - Trgr. pending : " + message.transaction_type + " " + message.symbol + " " + message.quantity + " @ " + message.trigger_price);
 				}
 				if (message.status == "complete") {
-					Worker.notifyMe("Completed|"+ message.transaction_type + "|" + message.symbol);
+					Worker.notifyMe("Completed|"+ message.transaction_type + "|" + message.symbol+ "|" +message.traded_quantity + "@" + message.average_price);
 					Worker.logme(message.order_id + " - Completed : " + message.transaction_type + " " + message.symbol + " " + message.traded_quantity + " @ " + message.average_price);
 					if(!restrictNewOrders && origOrder(message.order_id))
 					   placeTargerOrder(message);
@@ -375,7 +374,7 @@
 		var calc_tp = (txtTyp == "b") ? 1-(appconst.targetpcent/100)-0.01 : 1+(appconst.targetpcent/100);
 		var tp = (Math.round((pos.average_price) * calc_tp * 20) / 20);
 		Worker.logme("Placing target order for " + txtTyp.toUpperCase() + " " + pos.symbol + " " + pos.traded_quantity + " @ " + tp + " ["+appconst.targetpcent+"%]");
-		Worker.notifyMe("Placing tgt|" + txtTyp.toUpperCase() + "|" + pos.symbol + "|" + pos.traded_quantity + "@" + tp + " ["+appconst.targetpcent+"%]");
+		Worker.notifyMe("Placing tgt|" + txtTyp.toUpperCase() + "|" + pos.symbol + "|" + pos.traded_quantity + "@" + tp);
 		upstox.placeOrder({
 			"transaction_type": txtTyp,
 			"exchange": pos.exchange,
