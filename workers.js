@@ -73,7 +73,8 @@
 	function notifyMe(message,options){
 		tbot.sendMessage({
 			chat_id:appconst.mychatid, 
-			text:message
+			text:message,
+			parse_mode:"Markdown"
 		}).then(function(data){
 			//console.log(data);
 		}).catch(function(err){
