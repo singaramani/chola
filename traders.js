@@ -23,7 +23,7 @@
             //fs.readFile("D:\\token.txt", "utf8", function(err, data){
             if (err) {
                 return "file read error";
-                logme("file read error in traders.js");
+                // logme("file read error in traders.js");
             }
             if (isJsonString(data)) {
                 var codeData = JSON.parse(data);
@@ -513,8 +513,8 @@
             selectScrips_HL(n50, appconst.nscrips, 0);
         }
         if (appconst.stockpicks == "NFO") {
-            Worker.logme("`Getting " + appconst.stockpicks + " scrips pclose & open`");
-            Worker.notifyMe("Getting " + appconst.stockpicks + " scrips data");
+            Worker.logme("Getting " + appconst.stockpicks + " scrips pclose & open");
+            Worker.notifyMe("`Getting " + appconst.stockpicks + " scrips data`");
             selectScrips_HL(nfo, appconst.nscrips, 0);
         }
     };
