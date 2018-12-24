@@ -235,7 +235,7 @@
         var orderPrepArray = [];
         scripArr.forEach(function(scrip) {
             qty = Math.floor(balperscrip / Number(scrip.high));
-            orderPlanNotify += "*" + scrip.sym + "*\n" + "`Buy Abv. " + scrip.high.toString() + "\n" + "Sell Bel. " + scrip.low.toString() + "`\n\n";
+            orderPlanNotify += "*" + scrip.sym + "* `Qty: "+qty.toString()+"`\n" + "`Buy Abv. " + scrip.high.toString() + "\n" + "Sell Bel. " + scrip.low.toString() + "`\n\n";
             Worker.logme(scrip.sym.padEnd(15) + "|buy above " + scrip.high.toString().padStart(7) + "|sell below " + scrip.low.toString().padStart(7) + "|qty:" + qty.toString().padStart(4));
             //Worker.notifyMe(scrip.sym + "|buy abv. " + scrip.high.toString() + "|sell bel. " + scrip.low.toString() + "|qty:" + qty.toString());
             orderPrepArray.push({
