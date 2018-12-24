@@ -257,6 +257,7 @@
                 q: qty
             });
         });
+	Worker.notifyMe(orderPlanNotify);
         Worker.logme("----------------------------------------------------------------------");
         placeOrdr(orderPrepArray);
     }
