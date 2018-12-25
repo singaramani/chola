@@ -14,7 +14,7 @@
     var qty = process.env.TQTY || 3;
     var trigger_offset = 0.10;
     var price_offset = 0.05;
-    var balperscrip = 25000;
+    var balperscrip = 20000;
     var restrictNewOrders = false;
     var placedOrders = [];
 
@@ -379,7 +379,7 @@
 
     function placeTargerOrder(pos) {
         var txtTyp = (pos.transaction_type == "B" || pos.transaction_type == "b") ? "s" : "b";
-        var calc_tp = (txtTyp == "b") ? 1 - (appconst.targetpcent / 100) - 0.01 : 1 + (appconst.targetpcent / 100);
+        var calc_tp = (txtTyp == "b") ? 1 - (appconst.targetpcent / 100) - 0.005 : 1 + (appconst.targetpcent / 100);
         var tp = (Math.round((pos.average_price) * calc_tp * 20) / 20);
         Worker.logme("Placing target order for " + txtTyp.toUpperCase() + " " + pos.symbol + " " + pos.traded_quantity + " @ " + tp + " [" + appconst.targetpcent + "%]");
         Worker.notifyMe("`Placing Trgt|" + txtTyp.toUpperCase() + "|" + pos.symbol + "|" + pos.traded_quantity + "@" + tp+"`");
