@@ -14,7 +14,7 @@
     var qty = process.env.TQTY || 3;
     var trigger_offset = 0.10;
     var price_offset = 0.05;
-    var balperscrip = 750;
+    var balperscrip = 2000;
     var restrictNewOrders = false;
     var placedOrders = [];
 
